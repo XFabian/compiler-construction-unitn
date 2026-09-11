@@ -1,5 +1,6 @@
 [workspace]
 members = [ 
+    "demos/3.3-lexing",
     "intro",
     "runtime",
     "rwetac"

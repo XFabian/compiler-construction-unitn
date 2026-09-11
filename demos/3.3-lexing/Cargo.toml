@@ -1,0 +1,13 @@
+[package]
+name = "lexdemo"
+version = "0.1.0"
+edition = "2024"
+license.workspace = true
+
+[[bin]]
+name = "lexdemo"
+path = "src/main.rs"
+
+[dependencies]
+rwetac = { path = "../../rwetac" }
+logos = "0.15.0"

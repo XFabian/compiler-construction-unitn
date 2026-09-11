@@ -6,6 +6,44 @@ It compiles .eta files to .wat.
 Wasmer is used as its runtime and the runtime defines a memory allocator(malloc).
 
 
+## Getting started
+
+The only thing you need to install is Rust. Everything else — including
+[Wasmer](https://wasmer.io), which executes the generated WebAssembly — is a
+cargo dependency and is fetched and built for you.
+
+Install via [rustup.rs](https://rustup.rs). This workspace uses edition 2024, so
+Rust **1.85 or newer**:
+
+```
+git clone https://github.com/XFabian/compiler-construction-unitn.git
+cd compiler-construction-unitn
+cargo build --workspace
+cargo test  --workspace
+```
+
+Then compile and run a program:
+
+```
+cargo run --bin rwetac  -- demos/2.5-ast/01_functions.eta   // writes 01_functions.wat
+cargo run --bin runtime -- demos/2.5-ast/01_functions.wat   // prints Result : [I64(42)]
+```
+
+A successful compile prints nothing. See [Inspecting each
+phase](#inspecting-each-phase) for how to look at what it produced, and
+[demos/](demos/) for the worked examples.
+
+### Optional tools
+
+None of these are needed to build, run or test the compiler.
+
+| Tool | Needed for |
+|---|---|
+| [Graphviz](https://graphviz.org) (`dot`) | rendering the `.dot` CFG files written by `--dump`; `rwetac/dot2pdf.sh` drives it |
+| [WABT](https://github.com/WebAssembly/wabt) (`wat2wasm`) | converting the emitted `.wat` to binary `.wasm` |
+| `cargo install cargo-insta` | reviewing snapshot test changes |
+
+
 ## Compiler CLI
 
 The compiler is invoked by 

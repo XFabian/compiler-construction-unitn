@@ -1,0 +1,12 @@
+// Arrays live on the heap and carry their own length.
+main() : int {
+    a : int[] = {1, 2, 3, 4}
+    b : int[3]
+
+    i : int = 0
+    while (i < length(b)) {
+        b[i] = a[i] * 2
+        i = i + 1
+    }
+    return b[0] + b[1] + b[2] + length(a)
+}

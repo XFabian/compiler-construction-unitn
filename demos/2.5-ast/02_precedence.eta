@@ -1,0 +1,8 @@
+// The same numbers and operators, three different trees.
+// Compare the ASTs: the brackets are gone, but the shape remembers them.
+main() : int {
+    a : int = 1 + 2 * 3
+    b : int = (1 + 2) * 3
+    c : int = 10 - 4 - 3
+    return a + b + c
+}

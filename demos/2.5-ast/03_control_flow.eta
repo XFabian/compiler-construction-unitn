@@ -1,0 +1,22 @@
+// `if` without `else` and `if` with `else` are the same AST node.
+// The else branch is simply optional.
+classify(n : int) : int {
+    if (n < 0) {
+        return 0 - 1
+    }
+    if (n == 0) {
+        return 0
+    } else {
+        return 1
+    }
+}
+
+main() : int {
+    s : int = 0
+    i : int = 0
+    while (i < 5) {
+        s = s + classify(i - 2)
+        i = i + 1
+    }
+    return s
+}

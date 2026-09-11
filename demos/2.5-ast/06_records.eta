@@ -1,0 +1,15 @@
+// Records are not part of Eta upstream; this compiler adds them.
+// They live on the stack, so passing one copies it.
+record Point {
+    x, y : int
+}
+
+shift(p : Point, d : int) : Point {
+    return Point(p.x + d, p.y + d)
+}
+
+main() : int {
+    p : Point = Point(1, 2)
+    q : Point = shift(p, 10)
+    return q.x + q.y + p.x
+}

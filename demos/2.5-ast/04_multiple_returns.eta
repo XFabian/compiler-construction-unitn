@@ -1,0 +1,15 @@
+// Eta functions can return more than one value.
+divmod(a : int, b : int) : int, int {
+    return a / b, a - (a / b) * b
+}
+
+main() : int {
+    q : int = 0
+    r : int = 0
+    q, r = divmod(17, 5)
+
+    // The right-hand side is evaluated before anything is assigned,
+    // so this swaps rather than copying q into both.
+    q, r = r, q
+    return q * 10 + r
+}
