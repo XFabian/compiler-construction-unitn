@@ -1,0 +1,12 @@
+
+b : int = 0
+main(x : int) : int {
+    b = b + 2
+    x : int = x
+    {
+        b : int = 0
+        b = 1
+        x : int = 2
+    }
+    return x
+}

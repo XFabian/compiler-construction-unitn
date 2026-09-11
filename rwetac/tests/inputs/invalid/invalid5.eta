@@ -1,0 +1,4 @@
+main(args: int[][]): int {
+    x: int = 1 ** 2  // ← '**' not valid in Eta
+    return 0
+}

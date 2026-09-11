@@ -1,0 +1,17 @@
+// Example for Live Variable Analysis
+main() : int {
+    a : int = 1;  // 'a' is live (used in the if)
+    b : int = 2;  // 'b' is live (used to calculate c)
+    d : int = 5;  // 'd' is live (used in the return)
+
+    if (a > 0) {
+        c : int = b + 1; // 'b' is live here, then dead after this line.
+        d = c;         // 'c' is live here, then dead after this line.
+    } 
+    else {
+        d = 4;
+    }
+    // At this point, only 'd' is live. 'a', 'b', and 'c' are dead.
+
+    return d; // 'd' is live.
+}

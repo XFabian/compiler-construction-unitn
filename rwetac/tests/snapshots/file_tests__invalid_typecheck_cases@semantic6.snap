@@ -1,0 +1,5 @@
+---
+source: rwetac/tests/file_tests.rs
+expression: out
+---
+Failure: Types of LHS and RHS are mismatched. LHS: [Int] RHS: [Array { elem_type: Int }]

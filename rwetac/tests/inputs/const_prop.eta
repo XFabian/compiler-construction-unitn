@@ -1,0 +1,22 @@
+// Example for Constant Propagation
+main() : int {
+    x : int = 10;
+    y : int = 5;
+    z : int;
+    a : int = 3;
+
+    z = x + y;  // The compiler knows z = 10 + 5, so z is now the constant 15.
+
+    if (z < 20) { // This becomes 'if (15 < 20)', which is always true.
+        a = a + x;  // This becomes 'a = a + 10'.
+    } 
+    else {
+        // This 'else' block is unreachable and can be eliminated.
+        a = 99;
+    }
+
+    // Since 'y' is never changed and its only use was in calculating 'z',
+    // which was resolved to a constant, the storage for 'y' may be optimized away.
+
+    return a;
+}

@@ -1,0 +1,18 @@
+// EXPECT: 307
+main() : int {
+    total : int = 0
+    i : int = 0
+    while (i < 6) {
+        if (i % 2 == 0) {
+            j : int = 0
+            while (j < i) {
+                total = total + j
+                j = j + 1
+            }
+        } else {
+            total = total + 100
+        }
+        i = i + 1
+    }
+    return total
+}

@@ -1,0 +1,59 @@
+straight(x: int) : bool {
+    a : int = 3
+    b : int = a + x
+    return true
+}
+
+positive2(x : int) : bool {
+    b : bool
+    if (x > 0) {
+        b = true
+    }
+    else {
+        b = false
+    }
+    return b
+}
+
+positive(x : int) : bool {
+    if (x > 0) {
+        return true
+    }
+
+    return false
+}
+
+positive11(x : int) : bool {
+    if (x > 0) {
+        return true
+    }
+
+    if (x < 0) {
+        b : int = 1
+    }
+    else {
+        c : int = 2
+    }
+    return false
+}
+
+positive3(x : int) : bool {
+    if (x > 0) {
+        return true
+    }
+    else {
+        return false
+
+    }
+
+}
+
+doubleIf(x : int) : bool {
+    if (x > 0) {
+        if (x < 0) {
+            return true
+        }
+    }
+
+    return false
+}

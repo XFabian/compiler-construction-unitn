@@ -1,0 +1,5 @@
+---
+source: rwetac/tests/file_tests.rs
+expression: out
+---
+Failure: Initializer has wrong Tuple type. Length does not works. Found (int, int)

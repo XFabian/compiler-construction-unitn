@@ -1,0 +1,11 @@
+// EXPECT: 30
+pair() : int, int {
+    return 10, 20
+}
+
+main() : int {
+    a : int = 0
+    b : int = 0
+    a, b = pair()
+    return a + b
+}

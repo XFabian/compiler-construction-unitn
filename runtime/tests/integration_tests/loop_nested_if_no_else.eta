@@ -1,0 +1,12 @@
+// EXPECT: 20
+main() : int {
+    s : int = 0
+    i : int = 0
+    while (i < 10) {
+        if (i % 2 == 0) {
+            s = s + i
+        }
+        i = i + 1
+    }
+    return s
+}

@@ -1,0 +1,27 @@
+f : int = 6
+
+
+test3(x : int) {
+
+}
+
+add(x : int, y : int) : int {
+    return x + y
+}
+test(x : int, y : int) : int {
+
+    a : int[] = {1,2,3}
+    b : int[] = {a[1]}
+    d : int = a[1] + 4
+    a[1] = 6
+    // j : int = add(a[1], 4)
+    //test3(a[1]) // does it create the load?
+    return a[1]
+}
+
+array_store_to_load() : int {
+
+    a : int[] = {1,2,3}
+    c : int = a[2]
+    return c
+}

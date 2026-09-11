@@ -1,0 +1,12 @@
+// EXPECT: 200
+main() : int {
+    n : int = 10
+    m : int = 4
+    s : int = 0
+    i : int = 0
+    while (i < n) {
+        s = s + m * 5
+        i = i + 1
+    }
+    return s
+}

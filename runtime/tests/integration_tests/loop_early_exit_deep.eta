@@ -1,0 +1,20 @@
+// EXPECT: 34
+find(target : int) : int {
+    i : int = 0
+    while (i < 10) {
+        j : int = 0
+        while (j < 10) {
+            if (i * 10 + j == target) {
+                return i * 10 + j
+            } else {
+                j = j + 1
+            }
+        }
+        i = i + 1
+    }
+    return -1
+}
+
+main() : int {
+    return find(34)
+}

@@ -1,0 +1,2 @@
+main(args: int[][]): int
+    return 0  // ← body must be in braces

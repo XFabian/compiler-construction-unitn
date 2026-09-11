@@ -1,0 +1,38 @@
+// Used for CFG tests
+
+while_simple(x : int) : bool {
+    a : int = 0
+    while (x < 0) {
+        a = a + 1
+    }
+    return true
+}
+
+while_ret(x : int) : bool {
+    a : int = 0
+    while (x < 0) {
+        a = a + 1
+        if (a == 1) {
+            b : int = 2
+        }
+        return false
+    }
+    return true
+}
+
+while_nested(x : int) : bool {
+
+    while (x < 0) {
+
+        if (x > 0) {
+            return true
+        }
+        while (x > 0) {
+            b : int = 0
+            b = b + 1
+        }
+    }
+
+    a: int = 2
+    return true
+}

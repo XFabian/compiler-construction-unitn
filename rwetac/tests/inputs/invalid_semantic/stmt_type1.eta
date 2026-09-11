@@ -1,0 +1,10 @@
+// This function is invalid.
+get_sign(n: int): int {
+  if (n > 0) {
+    return 1 // This block is `void`
+  }
+  // The `if` statement itself is `unit`, because what happens if n <= 0?
+  // The function would fall off the end without returning.
+  // The type checker correctly flags this because the function body
+  // must be `void`, but it is `unit`.
+}

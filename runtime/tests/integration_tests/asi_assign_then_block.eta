@@ -1,0 +1,10 @@
+// EXPECT: 2
+main() : int {
+    a : int = 0
+    b : int = 1
+    a = b
+    {
+        a = 2
+    }
+    return a
+}

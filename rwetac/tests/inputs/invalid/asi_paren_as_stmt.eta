@@ -1,0 +1,5 @@
+main() : int {
+    a : int = 0
+    (1)
+    return a
+}

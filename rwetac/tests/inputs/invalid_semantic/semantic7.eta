@@ -1,0 +1,4 @@
+main(args: int[][]): int {
+    x: int = magicNumber()  // magicNumber not defined
+    return 0
+}

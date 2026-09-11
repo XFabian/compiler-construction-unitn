@@ -1,0 +1,11 @@
+// EXPECT: 12
+bump(a : int[]) {
+    a[0] = a[0] + 10
+}
+
+main() : int {
+    a : int[] = {2, 0}
+    a[0] = 2
+    bump(a)
+    return a[0]
+}

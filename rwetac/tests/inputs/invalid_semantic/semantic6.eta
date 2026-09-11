@@ -1,0 +1,5 @@
+main(args: int[][]): int {
+    x: int
+    x = "Hi"  // string (int[]) assigned to int
+    return 0
+}

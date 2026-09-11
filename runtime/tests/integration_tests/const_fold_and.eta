@@ -1,0 +1,9 @@
+// EXPECT: 0
+main() : int {
+    a : bool = false
+    b : bool = true
+    if (a & b) {
+        return 1
+    }
+    return 0
+}

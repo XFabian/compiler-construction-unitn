@@ -1,0 +1,9 @@
+f(x : int) : int {
+    return x
+}
+main() : int {
+    a : int = 0
+    a = f
+    (1)
+    return a
+}

@@ -1,0 +1,5 @@
+---
+source: rwetac/tests/file_tests.rs
+expression: out
+---
+Failure: Return has wrong type!. Number of types do not match. Found [Int, Int]

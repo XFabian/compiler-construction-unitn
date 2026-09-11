@@ -1,0 +1,22 @@
+// EXPECT: 6
+main() : int {
+    t : bool = true
+    f : bool = false
+    s : int = 0
+    if (t & t) {
+        s = s + 1
+    }
+    if (t & f) {
+        s = s + 10
+    }
+    if (f | t) {
+        s = s + 2
+    }
+    if (f | f) {
+        s = s + 20
+    }
+    if (!f) {
+        s = s + 3
+    }
+    return s
+}

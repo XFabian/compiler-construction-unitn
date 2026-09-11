@@ -1,0 +1,8 @@
+getCoords(): int, int {
+    return 3, 4
+}
+
+main(args: int[][]): int {
+    x: int = getCoords()  // expects 2 vars on LHS
+    return 0
+}

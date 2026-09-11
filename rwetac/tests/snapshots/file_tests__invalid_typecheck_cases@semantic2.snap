@@ -1,0 +1,5 @@
+---
+source: rwetac/tests/file_tests.rs
+expression: out
+---
+Failure: Function call needs non-empty return type. Function was printHello

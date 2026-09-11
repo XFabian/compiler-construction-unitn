@@ -1,0 +1,16 @@
+// EXPECT: 20
+record P {
+    x : int
+    y : int
+}
+
+main() : int {
+    p : P = P(0, 0)
+    i : int = 0
+    while (i < 5) {
+        p.x = p.x + 2
+        p.y = p.y + 2
+        i = i + 1
+    }
+    return p.x + p.y
+}

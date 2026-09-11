@@ -1,0 +1,5 @@
+---
+source: rwetac/tests/file_tests.rs
+expression: out
+---
+Failure: Unexpected Token Semicolon! Message: Expected Equal. Note the line break here was turned into a statement separator, so this `;` is not in the source. If this line was meant to continue the previous one, end the previous line with the operator or comma

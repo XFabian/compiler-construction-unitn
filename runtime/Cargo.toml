@@ -1,0 +1,19 @@
+[package]
+name = "runtime"
+version = "0.1.0"
+edition = "2024"
+license.workspace = true
+
+[dependencies]
+anyhow = "1.0.99"
+clap = { version = "4.5.45", features = ["derive"] }
+wasmer = "6.0.1"
+
+[dev-dependencies]
+rwetac = { path = "../rwetac" } # <-- Link to the compiler for tests
+insta = "1"
+wasmer = "6.0.1"
+tempfile = "3" # For writing compiled WAT to a temporary file
+rstest = "0.26.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter","ansi"] }
+

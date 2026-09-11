@@ -1,0 +1,12 @@
+// EXPECT: 3
+main() : int {
+    empty : int[] = {}
+    one : int[] = {3}
+    if (length(empty) != 0) {
+        return -1
+    }
+    if (length(one) != 1) {
+        return -2
+    }
+    return one[0]
+}

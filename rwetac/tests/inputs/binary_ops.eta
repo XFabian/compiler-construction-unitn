@@ -1,0 +1,18 @@
+main() {
+    a : int = 10;
+    b : int = 5;
+    c : int = 7;
+
+    a = b + c;
+    b = a - c;
+    c = a * b;
+    d : int = a / b;
+    d = a % b;
+
+    x : int[] = {1, 2+3, 5};
+
+    y : int[] = x + "hi"
+
+    h : int = x[1] + a;
+
+}

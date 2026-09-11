@@ -1,0 +1,21 @@
+// EXPECT: 107
+g : int = 0
+
+bump() {
+    g = g + 1
+}
+
+early(n : int) {
+    if (n > 0) {
+        return
+    }
+    g = g + 100
+}
+
+main() : int {
+    bump()
+    bump()
+    early(1)
+    early(0)
+    return g + 5
+}

@@ -1,0 +1,6 @@
+main(args: int[][]): int {
+    a: int[] = {1, 2, 3}
+    b: bool = true
+    x: int = a[b]  // type mismatch: bool used as index
+    return 0
+}

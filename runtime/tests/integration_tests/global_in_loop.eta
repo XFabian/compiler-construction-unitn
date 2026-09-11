@@ -1,0 +1,15 @@
+// EXPECT: 55
+acc : int = 0
+
+add(v : int) {
+    acc = acc + v
+}
+
+main() : int {
+    i : int = 1
+    while (i <= 10) {
+        add(i)
+        i = i + 1
+    }
+    return acc
+}

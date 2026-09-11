@@ -1,0 +1,4 @@
+main(args: int[][]): int {
+    s: int[] = "Hello"world"  // ← broken string literal
+    return 0
+}

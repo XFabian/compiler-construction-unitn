@@ -1,0 +1,19 @@
+// EXPECT: 23
+f() : int {
+    i : int = 0
+    while (i < 5) {
+        j : int = 0
+        while (j < 5) {
+            if (i == 2 & j == 3) {
+                return i * 10 + j
+            }
+            j = j + 1
+        }
+        i = i + 1
+    }
+    return 0
+}
+
+main() : int {
+    return f()
+}

@@ -1,0 +1,10 @@
+// EXPECT: trap
+main() : int {
+    s : int = 0
+    i : int = 0
+    while (i < 3) {
+        s = s + 100 / i
+        i = i + 1
+    }
+    return s
+}

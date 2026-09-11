@@ -1,0 +1,9 @@
+// EXPECT: -3129
+// Division truncates toward zero and % takes the sign of the dividend.
+main() : int {
+    a : int = -7 / 2
+    b : int = -7 % 2
+    c : int = 7 / -2
+    d : int = 7 % -2
+    return a * 1000 + b * 100 + c * 10 + d
+}

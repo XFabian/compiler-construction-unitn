@@ -1,0 +1,9 @@
+[workspace]
+members = [ 
+    "runtime",
+    "rwetac"
+]
+resolver = "3"
+
+[workspace.package]
+license = "MIT"

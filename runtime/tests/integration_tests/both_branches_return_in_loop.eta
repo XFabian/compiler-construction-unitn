@@ -1,0 +1,16 @@
+// EXPECT: 7
+f(n : int) : int {
+    i : int = 0
+    while (i < 10) {
+        if (i > 3) {
+            return 7
+        } else {
+            return 8
+        }
+    }
+    return 9
+}
+
+main() : int {
+    return f(1) - 1
+}

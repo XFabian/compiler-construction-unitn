@@ -1,0 +1,29 @@
+// EXPECT: 1
+isodd(a:int) : bool {
+    b : bool
+    if a == 0 {
+        b = false
+    } 
+    else 
+    {
+        b = iseven(a-1)
+    }
+   return b
+}
+
+iseven(b:int) : bool {
+    c : bool
+    if b == 0 
+    {
+        c = true 
+    }
+    else {
+        c = isodd(b-1)
+    }
+   return c
+}
+
+
+main() : bool {
+    return iseven(8)
+}

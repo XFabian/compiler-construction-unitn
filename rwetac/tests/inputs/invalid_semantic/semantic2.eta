@@ -1,0 +1,8 @@
+printHello() {
+    // procedure
+}
+
+main(args: int[][]): int {
+    x: int = printHello()  // cannot use procedure in expression
+    return 0
+}

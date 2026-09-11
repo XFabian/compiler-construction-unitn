@@ -1,0 +1,18 @@
+// EXPECT: 3
+
+
+main() : int {
+    a : int[3][4] 
+    i : int = 0
+    while i < 3 {
+    j : int = 0
+
+        while j < 4 
+        {
+            a[i][j] = j
+            j = j + 1
+        }
+        i = i + 1
+    }
+    return a[2][3]
+}

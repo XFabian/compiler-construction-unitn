@@ -1,0 +1,6 @@
+// EXPECT: -9223372036854775808
+// i64 arithmetic wraps; WASM has no trapping add.
+main() : int {
+    max : int = 9223372036854775807
+    return max + 1
+}

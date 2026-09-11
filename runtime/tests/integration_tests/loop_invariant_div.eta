@@ -1,0 +1,16 @@
+// EXPECT: 0
+// The invariant `100 / d` must not be hoisted out of a loop that never runs:
+// d is 0 here, so evaluating it even once traps.
+divloop(n : int, d : int) : int {
+    s : int = 0
+    i : int = 0
+    while (i < n) {
+        s = s + 100 / d
+        i = i + 1
+    }
+    return s
+}
+
+main() : int {
+    return divloop(0, 0)
+}

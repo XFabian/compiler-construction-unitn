@@ -1,0 +1,16 @@
+// EXPECT: 8
+fib(i:int) : int {
+    if i < 2 
+    {
+        return i
+    } 
+    else 
+    {
+        return fib(i-1) + fib(i-2)
+    }
+}
+
+// 5th element in the sequence starting at 0
+main() : int {
+    return fib(6)
+}

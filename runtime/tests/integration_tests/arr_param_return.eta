@@ -1,0 +1,25 @@
+// EXPECT: 15
+fill(a : int[], v : int) {
+    i : int = 0
+    while (i < length(a)) {
+        a[i] = v
+        i = i + 1
+    }
+}
+
+total(a : int[]) : int {
+    s : int = 0
+    i : int = 0
+    while (i < length(a)) {
+        s = s + a[i]
+        i = i + 1
+    }
+    return s
+}
+
+main() : int {
+    a : int[3]
+    e : int[0]
+    fill(a, 5)
+    return total(a) + total(e)
+}

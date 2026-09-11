@@ -1,0 +1,7 @@
+// EXPECT: 9
+main() : int {
+    a : int[] = {1, 2, 3}
+    b : int[] = a
+    b[0] = 7
+    return a[0] + a[1]
+}

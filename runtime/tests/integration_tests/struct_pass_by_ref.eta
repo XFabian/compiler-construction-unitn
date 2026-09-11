@@ -1,0 +1,17 @@
+// EXPECT: 2
+
+
+
+record Point {
+    x,y : int
+}
+
+swap(p : Point) {
+    p.x, p.y = p.y, p.x
+}
+
+main() : int {
+    p : Point = Point(1,2)
+    swap(p)
+    return p.x
+}

@@ -1,0 +1,18 @@
+// EXPECT: 7
+record R {
+    flag : bool
+    n : int
+}
+
+setn(r : R, v : int) {
+    r.n = v
+}
+
+main() : int {
+    r : R = R(false, 1)
+    setn(r, 7)
+    if r.flag {
+        return 0
+    }
+    return r.n
+}

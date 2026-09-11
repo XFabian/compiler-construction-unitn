@@ -1,0 +1,4 @@
+main(args: int[][]): int {
+    x: int = true  // type mismatch
+    return 0
+}

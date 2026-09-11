@@ -1,0 +1,19 @@
+record Point {
+    x, y :int
+}
+
+createPoint(x : int, y : int) : Point {
+    return Point(x,y)
+}
+swap(p : Point) {
+    t : int = p.x;
+    p.x = p.y;
+    p.y = t;
+}
+
+add(x : int, y : int) : int  {
+    z : int = 4;
+    b : int = 5;
+    z, b = b, z;
+    return 2 + 3;
+}

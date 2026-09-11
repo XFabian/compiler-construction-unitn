@@ -1,0 +1,6 @@
+// EXPECT: 5
+main() : int {
+    a : int = 7
+    b : int = -a + 12
+    return b
+}

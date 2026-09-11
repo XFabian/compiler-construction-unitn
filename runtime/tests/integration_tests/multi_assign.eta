@@ -1,0 +1,9 @@
+// EXPECT: 3
+
+
+main() : int {
+    a : int = 2
+    b : int = 3
+    a, b = b, a 
+    return a
+}

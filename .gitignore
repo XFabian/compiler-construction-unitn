@@ -1,0 +1,9 @@
+/target
+.vscode
+
+*.debug.*
+*.wat
+*.wasm
+rwetac/Dot_files
+
+*.snap.new

@@ -1,0 +1,10 @@
+// This function is valid.
+abs(n: int): int {
+  if (n < 0) {
+    return -n // `void`, and last in its block.
+  } 
+  else {
+    return n  // `void`, and last in its block.
+  }
+  // The if-else is `void`, so the function body is `void`.
+}

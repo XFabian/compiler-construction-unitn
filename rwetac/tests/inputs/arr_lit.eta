@@ -1,0 +1,8 @@
+arr_lit () : int {
+    a : int[] = {1, 2, 3}
+    d : bool = a == a
+    f : int [] = a + a
+    b : int[][] = {{1,2}, {3,4}}
+    c : int[] = {}
+    return b[1][1]
+}

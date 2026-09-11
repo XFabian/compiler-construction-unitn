@@ -1,0 +1,13 @@
+h : int = 6
+constpr () : int {
+    a : int = 7
+    b : int = 2 + 4
+    c : int = b 
+    b = 4
+    d : int = b + a
+    return d
+}
+
+// constant prop of a and b
+// copy props as well 
+// folding also

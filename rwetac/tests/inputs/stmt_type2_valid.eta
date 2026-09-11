@@ -1,0 +1,8 @@
+// This procedure is valid because the if statement is `unit`.
+print_positive(n: int) {
+  if (n > 0) {
+    // The inner block has a procedure call, which is `unit`.
+    // Even if it had a `return`, the outer `if` would still be `unit`.
+  }
+  // Control flow continues here.
+}

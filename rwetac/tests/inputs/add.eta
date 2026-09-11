@@ -1,0 +1,4 @@
+add (x : int, y : int) : int {
+    z : int = x + y + 0
+    return z
+}

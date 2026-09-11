@@ -1,0 +1,7 @@
+f(): int {
+    return true  // wrong type
+}
+
+main(args: int[][]): int {
+    return 0
+}

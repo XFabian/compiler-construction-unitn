@@ -1,0 +1,3 @@
+main(args: int[][]): int {
+    x: int = return 5  // ← return can’t be used as an expression
+}

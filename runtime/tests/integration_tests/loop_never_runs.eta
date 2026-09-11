@@ -1,0 +1,20 @@
+// EXPECT: 42
+sum_to(n : int) : int {
+    total : int = 0
+    i : int = 0
+    while (i < n) {
+        total = total + i
+        i = i + 1
+    }
+    return total
+}
+
+main() : int {
+    a : int = sum_to(0)
+    b : int = sum_to(-3)
+    c : int = 0
+    while (false) {
+        c = 1
+    }
+    return a + b + c + 42
+}

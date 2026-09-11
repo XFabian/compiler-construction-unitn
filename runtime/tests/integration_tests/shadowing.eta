@@ -1,0 +1,10 @@
+// EXPECT: 12
+main() : int {
+    x : int = 1
+    i : int = 0
+    while (i < 3) {
+        x : int = 4
+        i = i + x
+    }
+    return i * 3
+}

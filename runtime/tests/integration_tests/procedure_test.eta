@@ -1,0 +1,12 @@
+// EXPECT: 1
+
+
+a : int = 0
+proc() {
+    a = 1
+}
+
+main() : int {
+    proc()
+    return a
+}

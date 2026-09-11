@@ -1,0 +1,14 @@
+function1 () : int, int {
+    return 1, 2
+}
+
+
+function3 () : int {
+    c: int 
+    f:int
+    d : int
+    a:int, c = function1();
+    c, d = function1()
+     _, _ = function1()
+    return a
+}

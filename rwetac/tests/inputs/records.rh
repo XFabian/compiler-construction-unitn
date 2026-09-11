@@ -1,0 +1,39 @@
+
+
+record Point {
+    x, y : int 
+}
+
+record Point2 {
+    x : int;
+    y : int
+}
+
+createPoint(x : int , y : int) : Point {
+    a : Point = Point(1,2)
+    b : Point = Point(2,3)
+    return Point(x, y)
+}
+
+swap(p : Point) {
+    t : int = p.x
+    p.x = p.y
+    p.y = p.x
+}
+
+main() : int {
+    a : Point = Point(1,2)
+    swap(a)
+    return a.x
+}
+
+record Node {
+    value : int 
+    next : Node
+}
+
+nodeFun (n : Node) {
+    a : int = n.next.value
+    b : Point[0];
+    f : int = b[1].x
+}

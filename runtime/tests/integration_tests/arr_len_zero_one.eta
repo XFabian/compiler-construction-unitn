@@ -1,0 +1,7 @@
+// EXPECT: 8
+main() : int {
+    empty : int[0]
+    one : int[1]
+    one[0] = 7
+    return length(empty) + length(one) + one[0]
+}

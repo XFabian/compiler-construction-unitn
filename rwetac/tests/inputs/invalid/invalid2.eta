@@ -1,0 +1,4 @@
+main(args: int[][]): int {
+    if: int = 3  // ← 'if' is a keyword
+    return 0
+}

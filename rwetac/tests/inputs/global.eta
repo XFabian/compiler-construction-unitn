@@ -1,0 +1,11 @@
+a :int = 4
+b : int 
+c : int[]
+
+glob() {
+    b = 0
+}
+
+glob2() {
+    a = 0
+}

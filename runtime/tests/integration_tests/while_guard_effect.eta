@@ -1,0 +1,17 @@
+// EXPECT: 5
+// The guard has a side effect, so it must be re-evaluated every iteration and
+// must not be hoisted or common-subexpression-eliminated.
+c : int = 0
+
+next() : int {
+    c = c + 1
+    return c
+}
+
+main() : int {
+    total : int = 0
+    while (next() < 6) {
+        total = total + 1
+    }
+    return total
+}

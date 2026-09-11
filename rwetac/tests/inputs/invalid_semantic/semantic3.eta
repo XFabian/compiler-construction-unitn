@@ -1,0 +1,7 @@
+f(): int {
+    return 1, 2  // too many return values
+}
+
+main(args: int[][]): int {
+    return 0
+}
