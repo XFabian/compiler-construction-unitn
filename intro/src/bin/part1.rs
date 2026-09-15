@@ -41,12 +41,6 @@ fn apply(op: Op, a: i64, b: i64) -> i64 {
     }
 }
 
-// ASK: neither function body has a `return`, and neither match arm ends in a
-//      semicolon. So is `match` a statement or an expression? What is the type
-//      of the one in `symbol`, and of the one in `apply`?
-
-// ASK: add a `Rem` variant to Op and do not touch `symbol`. What happens, and
-//      at what point -- compile time or run time?
 
 fn simple_enum() {
     println!("=== 1. A simple enum ===");
@@ -70,9 +64,6 @@ enum Token {
     RParen,
 }
 
-// ASK: why an enum here, and not `struct Token { kind: u8, value: i64 }`?
-//      Which states does the enum make impossible to write down?
-
 fn describe(tok: &Token) -> String {
     match tok {
         Token::Int(0) => "the literal zero".to_string(),
@@ -82,8 +73,6 @@ fn describe(tok: &Token) -> String {
         Token::LParen | Token::RParen => "a bracket".to_string(),
     }
 }
-
-// ASK: the first three arms all match `Token::Int`. What decides which one wins?
 
 fn enums_with_data() {
     println!("=== 2. Variants carrying data ===");
@@ -119,8 +108,6 @@ fn lookup(table: &[(&str, i64)], name: &str) -> Option<i64> {
     None
 }
 
-// ASK: what would `lookup` return in a language without Option? What goes
-//      wrong with that answer?
 
 fn options() {
     println!("=== 3. Option ===");
@@ -163,8 +150,6 @@ fn parse_and_add(a: &str, b: &str) -> Result<i64, std::num::ParseIntError> {
     Ok(a + b)
 }
 
-// ASK: `?` is doing a match under the hood. Write out the match it expands to.
-
 fn results() {
     println!("=== 4. Result ===");
 
@@ -175,8 +160,14 @@ fn results() {
         }
     }
 
-    println!("  parse_and_add(\"2\", \"40\")  = {:?}", parse_and_add("2", "40"));
-    println!("  parse_and_add(\"2\", \"forty\") = {:?}", parse_and_add("2", "forty"));
+    println!(
+        "  parse_and_add(\"2\", \"40\")  = {:?}",
+        parse_and_add("2", "40")
+    );
+    println!(
+        "  parse_and_add(\"2\", \"forty\") = {:?}",
+        parse_and_add("2", "forty")
+    );
 
     println!();
 }

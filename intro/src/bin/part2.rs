@@ -5,17 +5,19 @@
 //! in the course, so here we build it by hand.
 //!
 //! Run with `cargo run -p intro --bin part2`.
-//!
-//! Lines marked `ASK:` are discussion prompts, not instructions to the reader.
 
 fn main() {
-    for e in examples() {
-        println!("{}", pretty(&e));
-        match eval(&e) {
-            Ok(v) => println!("  = {v}"),
-            Err(e) => println!("  = error, {e:?}"),
-        }
-        println!();
+    for mut e in examples() {
+        // println!("{}", pretty(&e));
+        // match eval(&e) {
+        //     Ok(v) => println!("  = {v}"),
+        //     Err(e) => println!("  = error, {e:?}"),
+        // }
+        // println!();
+
+        // println!("  additions: {}", count_additions(&e));
+
+        println!("{} simplifies to {}", pretty(&e), pretty(&simplify(&mut e)));
     }
 }
 
@@ -46,8 +48,6 @@ enum Expr {
     },
 }
 
-// ASK: why is the tree the right shape for this, rather than a list of tokens?
-//      Where did the brackets from the source text go?
 
 // Constructors, so the examples below read like the expressions they build.
 fn num(n: i64) -> Expr {
@@ -78,12 +78,15 @@ fn examples() -> Vec<Expr> {
         bin(Op::Mul, neg(bin(Op::Add, num(2), num(3))), num(4)),
         // 1 / 0
         bin(Op::Div, num(1), num(0)),
+        // (1 + 0) + 0
+        bin(Op::Add, bin(Op::Add, num(1), num(0)), num(0)),
+        // (1 + 0) + 2
+        bin(Op::Add, bin(Op::Add, num(1), num(0)), num(2)),
+        // (1 + 3) + 0
+        bin(Op::Add, bin(Op::Add, num(1), num(3)), num(0)),
     ]
 }
 
-// ASK: the first two examples contain the same numbers and the same operators.
-//      What distinguishes them, and why can no amount of re-reading the text
-//      "1 + 2 * 3" tell you which one the programmer meant?
 
 // ---------------------------------------------------------------------------
 // Pretty printing
@@ -139,9 +142,6 @@ fn eval(e: &Expr) -> Result<i64, EvalError> {
     })
 }
 
-// ASK: `pretty` and `eval` have the same shape -- one match, three arms, two
-//      recursive calls. Why? What else could you write against this AST?
-
 // ---------------------------------------------------------------------------
 // Exercises
 // ---------------------------------------------------------------------------
@@ -163,7 +163,7 @@ fn eval(e: &Expr) -> Result<i64, EvalError> {
 ///     println!("  additions: {}", count_additions(&e));
 #[allow(dead_code, unused_variables)]
 fn count_additions(e: &Expr) -> usize {
-    todo!("exercise 1")
+    todo!()
 }
 
 /// Exercise 2: simplify `x + 0` to `x`.
@@ -172,7 +172,7 @@ fn count_additions(e: &Expr) -> usize {
 /// wherever they appear in the tree. Leave everything else alone.
 ///
 /// Simplify the children *first*, then look at the node you are standing on.
-/// Otherwise `((1 + 0) + 0)` only loses one of its two zeros -- the inner
+/// Otherwise, `((1 + 0) + 0)` only loses one of its two zeros -- the inner
 /// `1 + 0` does not become a plain `1` until after you have already decided
 /// what to do with the outer node.
 ///
@@ -183,8 +183,8 @@ fn count_additions(e: &Expr) -> usize {
 ///
 /// Can you think of other optimizations?
 #[allow(dead_code, unused_variables)]
-fn simplify(e: &Expr) -> Expr {
-    todo!("exercise 2")
+fn simplify(expr: &mut Expr) -> Expr {
+    todo!()
 }
 
 // ---------------------------------------------------------------------------

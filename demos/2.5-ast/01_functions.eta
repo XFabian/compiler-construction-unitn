@@ -10,5 +10,6 @@ ignore(x : int) {
 }
 
 main() : int {
-    return add(2, 40)
+    ignore(2)
+    return add(3, add(20, 30))
 }

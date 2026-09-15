@@ -37,12 +37,21 @@ const SNIPPETS: &[(&str, &str)] = &[
     ("one token per symbol", "a = 1 + 2"),
     ("longest match wins: `==` is one token, not two", "a == b"),
     ("keywords are not identifiers", "if while return true"),
-    ("identifiers may contain keywords", "iffy whilst returnValue"),
+    (
+        "identifiers may contain keywords",
+        "iffy whilst returnValue",
+    ),
     ("literals are parsed here, not later", "x = 42"),
-    ("comments never reach the parser", "a = 1 // the rest of this line is gone"),
+    (
+        "comments never reach the parser",
+        "a = 1 // the rest of this line is gone",
+    ),
     ("a newline after `1` becomes a semicolon", "a = 1\nb = 2"),
     ("a newline after `+` does not", "a = 1 +\n2"),
-    ("the lexer does not care that this cannot parse", ") } ; = =")
+    (
+        "the lexer does not care that this cannot parse",
+        ") } ; = =",
+    ),
 ];
 
 fn show(src: &str) {
