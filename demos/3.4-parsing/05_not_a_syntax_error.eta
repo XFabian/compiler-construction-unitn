@@ -1,0 +1,11 @@
+// Deck 3 slide 47: `x = a + true` — is this a syntactic error?
+//
+// No. It lexes, and it parses: `+` takes two expressions and `true` is one.
+// The parser has no idea what a type is, so it builds the tree happily and
+// `--parse` prints it. Only `--validate` rejects this, which is the whole
+// reason deck 4 exists.
+main() : int {
+    a : int = 1
+    x : int = a + true
+    return x
+}

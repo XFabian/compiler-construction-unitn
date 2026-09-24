@@ -1,0 +1,17 @@
+// Which `if` does the `else` belong to?
+//
+// Nothing in the grammar says. `parse_if` decides it: after parsing the
+// then-branch it asks `peek() == Else` straight away, so the innermost call
+// still on the stack claims the `else` first. Nearest `if` wins.
+classify(x : int, y : int) : int {
+    if x > 0
+        if y > 0
+            return 1
+        else
+            return 2
+    return 3
+}
+
+main() : int {
+    return classify(1, -1)
+}
