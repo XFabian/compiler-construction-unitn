@@ -150,6 +150,7 @@ fn parse_and_add(a: &str, b: &str) -> Result<i64, std::num::ParseIntError> {
     Ok(a + b)
 }
 
+
 fn results() {
     println!("=== 4. Result ===");
 

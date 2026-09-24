@@ -39,7 +39,7 @@ pub enum UnaryOp {
     Neg,
 }
 
-/// The kind of an expression, without span information.
+/// The kinds of an expression, without span information.
 ///
 /// Separated from [`Expression`] so that pattern matching on the kind
 /// does not require destructuring the span every time.
@@ -113,7 +113,7 @@ impl LVal {
         }
     }
 }
-/// The kind of a statement, without span information.
+/// The kinds of a statement, without span information.
 #[derive(Debug)]
 pub enum StatementKind {
     /// A local variable or array declaration (e.g. `x: int = 5`).
@@ -136,7 +136,7 @@ pub enum StatementKind {
     Compound(Block),
 
     /// An `if` statement with an optional `else` branch.
-    If {
+    If {    
         guard: Expression,
         then_br: Box<Statement>,
         else_br: Option<Box<Statement>>,

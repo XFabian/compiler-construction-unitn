@@ -6,18 +6,25 @@
 //!
 //! Run with `cargo run -p intro --bin part2`.
 
+use std::f32::consts::E;
+use std::mem;
+use std::ops::Deref;
+use crate::Op::Add;
+
 fn main() {
     for mut e in examples() {
-        // println!("{}", pretty(&e));
-        // match eval(&e) {
-        //     Ok(v) => println!("  = {v}"),
-        //     Err(e) => println!("  = error, {e:?}"),
-        // }
-        // println!();
-
-        // println!("  additions: {}", count_additions(&e));
-
-        println!("{} simplifies to {}", pretty(&e), pretty(&simplify(&mut e)));
+        println!("{}", pretty(&e));
+        match eval(&e) {
+            Ok(v) => println!("  = {v}"),
+            Err(e) => println!("  = error, {e:?}"),
+        }
+        println!();
+    }
+    for mut e in examples() {
+        println!("  additions: {}", count_additions(&e));
+    }
+    for mut e in examples() {
+        println!("{} simplifies to {}", pretty(&e), pretty(&simplify(e)));
     }
 }
 
@@ -78,12 +85,14 @@ fn examples() -> Vec<Expr> {
         bin(Op::Mul, neg(bin(Op::Add, num(2), num(3))), num(4)),
         // 1 / 0
         bin(Op::Div, num(1), num(0)),
-        // (1 + 0) + 0
-        bin(Op::Add, bin(Op::Add, num(1), num(0)), num(0)),
+        // (1 + 0) - 0
+        bin(Op::Add, bin(Op::Sub, num(1), num(0)), num(0)),
         // (1 + 0) + 2
         bin(Op::Add, bin(Op::Add, num(1), num(0)), num(2)),
         // (1 + 3) + 0
         bin(Op::Add, bin(Op::Add, num(1), num(3)), num(0)),
+        // -(-(1+0))
+        neg(neg(bin(Op::Add, num(1), num(0))))
     ]
 }
 
@@ -163,7 +172,17 @@ fn eval(e: &Expr) -> Result<i64, EvalError> {
 ///     println!("  additions: {}", count_additions(&e));
 #[allow(dead_code, unused_variables)]
 fn count_additions(e: &Expr) -> usize {
-    todo!()
+    match e {
+        Expr::Num(_) => {0}
+        Expr::Neg(i) => {count_additions(i)}
+        Expr::Bin { op,lhs,rhs } => {
+            let mut sub = count_additions(lhs) + count_additions(rhs);
+            if let Add = op {
+                sub += 1;
+            }
+            sub
+        }
+    }
 }
 
 /// Exercise 2: simplify `x + 0` to `x`.
@@ -183,8 +202,37 @@ fn count_additions(e: &Expr) -> usize {
 ///
 /// Can you think of other optimizations?
 #[allow(dead_code, unused_variables)]
-fn simplify(expr: &mut Expr) -> Expr {
-    todo!()
+fn simplify(expr: Expr) -> Expr {
+    match expr {
+        Expr::Num(n) => {
+            Expr::Num(n)
+        }
+        Expr::Neg(inner) => {
+            let inn = simplify(*inner);
+            match inn {
+                Expr::Neg(inninn) => {
+                    *inninn
+                }
+                _ =>Expr::Neg(Box::new(inn))
+            }
+
+        }
+        Expr::Bin { op, lhs, rhs } => {
+            let nlhs = simplify(*lhs);
+            let nrhs = simplify(*rhs);
+            match (op, nlhs, nrhs) {
+                (Op::Sub, nlhs, Expr::Num(0)) |
+                (Op::Add, nlhs, Expr::Num(0)) => nlhs,
+                (Op::Sub, Expr::Num(0), nrhs) => Expr::Neg(Box::new(nrhs)),
+                (Op::Add, Expr::Num(0), nrhs) => nrhs,
+                (op, nlhs, nrhs) => Expr::Bin {
+                    op: op,
+                    lhs: Box::new(nlhs),
+                    rhs: Box::new(nrhs)
+                }
+            }
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
