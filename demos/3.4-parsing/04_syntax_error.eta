@@ -1,0 +1,9 @@
+// Lexes perfectly, parses not at all.
+//
+// Every token here is legal Eta, so the lexer demo in demos/3.3-lexing is
+// happy with this file. The parser is the phase that knows `2 +` cannot be
+// followed by `)`, and the span on the error is what points at it.
+main() : int {
+    a : int = (1 + 2 + ) * 3
+    return a
+}

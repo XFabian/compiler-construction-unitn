@@ -1,0 +1,11 @@
+// One expression per line, each chosen to make the climb visible.
+//
+// Run with RUST_LOG=rwetac::parser=debug and watch `min_prec` change:
+// a tighter operator recurses with a higher floor, so it cannot swallow
+// the looser operator waiting outside.
+main() : int {
+    a : int = 1 + 2 * 3
+    b : int = (1 + 2) * 3
+    c : bool = 1 + 2 < 4 & true
+    return a + b
+}
