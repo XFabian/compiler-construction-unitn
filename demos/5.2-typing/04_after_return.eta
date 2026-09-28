@@ -1,0 +1,6 @@
+// (SEQ): every statement except the last must be unit. A return is void,
+// so nothing may follow it.
+f() : int {
+    return 1
+    x : int = 2
+}

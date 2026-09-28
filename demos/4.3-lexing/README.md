@@ -1,4 +1,4 @@
-# Demo 3.3 — Lexing with logos
+# Demo 4.3 — Lexing with logos
 
 Tokenising short lines of Eta with the compiler's own lexer. Nothing here
 reimplements anything: the `Token` enum and the `Lexer` are imported from
@@ -86,4 +86,4 @@ semicolons in it — look back at `demos/2.5-ast/`.
 ## What lexing does not catch
 
 The `) } ; = =` line tokenises perfectly and is not a program. The lexer's job
-ends at "these are the words"; whether they form a sentence is deck 3's parser.
+ends at "these are the words"; whether they form a sentence is deck 4's parser.

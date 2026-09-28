@@ -1,0 +1,5 @@
+// (RETURN): Γ(ρ) = ret int, but the returned expression is a bool.
+// In rwetac ρ is not in the table: it is the ret_t parameter, passed down.
+f() : int {
+    return true
+}

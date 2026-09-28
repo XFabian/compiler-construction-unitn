@@ -1,0 +1,10 @@
+// Two x's, two types. After renaming they are x.0 and x.2, so one flat
+// table holds both: Γ never has to forget anything at a closing brace.
+positive(x : int) : bool {
+    y : bool = x > 0
+    {
+        x : bool = true // shadowing
+        y = x & y
+    }
+    return y
+}

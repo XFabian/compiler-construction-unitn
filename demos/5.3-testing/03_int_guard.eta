@@ -1,0 +1,7 @@
+// (IF): the guard must be a bool. In C this compiles; in Eta it does not.
+count(n : int) : int {
+    if n {
+        return 1
+    }
+    return 0
+}

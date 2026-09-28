@@ -6,8 +6,8 @@
 nesting is the recursion — this script turns it back into indentation.
 
     RUST_LOG=rwetac::parser=debug cargo run -q --bin rwetac \
-        -- --parse demos/3.4-parsing/01_precedence.eta 2>&1 \
-      | python3 demos/3.4-parsing/trim_trace.py
+        -- --parse demos/4.4-parsing/01_precedence.eta 2>&1 \
+      | python3 demos/4.4-parsing/trim_trace.py
 
 Log lines become the trace; anything else (the `--parse` dump, or an error)
 is passed through with spans stripped, the same way trim_ast.py does it.

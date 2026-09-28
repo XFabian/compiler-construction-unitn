@@ -1,8 +1,8 @@
-# Demo 3.4 — Parsing with the compiler's own parser
+# Demo 4.4 — Parsing with the compiler's own parser
 
 Five small Eta programs and one script. Nothing here reimplements parsing:
 everything is the `rwetac` binary you already have, so what it prints is what
-the compiler does. This is the demo deck 3 slide 43 asks for.
+the compiler does. This is the demo the `Demo Parser` slide of deck 4 asks for.
 
 Run everything from the repository root.
 
@@ -14,8 +14,8 @@ recursion. `trim_trace.py` turns that nesting back into indentation:
 
 ```
 RUST_LOG=rwetac::parser=debug cargo run -q --bin rwetac \
-    -- --parse demos/3.4-parsing/01_precedence.eta 2>&1 \
-  | python3 demos/3.4-parsing/trim_trace.py
+    -- --parse demos/4.4-parsing/01_precedence.eta 2>&1 \
+  | python3 demos/4.4-parsing/trim_trace.py
 ```
 
 ```
@@ -86,7 +86,7 @@ after parsing the then-branch it checks `peek() == Else` immediately, so the
 innermost call still on the stack claims it first. Nearest `if` wins.
 
 ```
-cargo run -q --bin rwetac -- --parse demos/3.4-parsing/03_dangling_else.eta \
+cargo run -q --bin rwetac -- --parse demos/4.4-parsing/03_dangling_else.eta \
   | python3 demos/2.5-ast/trim_ast.py --indent
 ```
 
@@ -103,16 +103,16 @@ has no way to express the ambiguity in the first place.
 They bracket what parsing is responsible for.
 
 ```
-cargo run -q --bin rwetac -- --parse demos/3.4-parsing/04_syntax_error.eta
+cargo run -q --bin rwetac -- --parse demos/4.4-parsing/04_syntax_error.eta
 Error: Parsing failed at 7:24. Unexpected Token RParen! Message: Primary Expression not possible!
 ```
 
 Every token in `04` is legal Eta — run it through `cargo run -p lexdemo --
---file demos/3.4-parsing/04_syntax_error.eta` and the lexer is perfectly happy.
+--file demos/4.4-parsing/04_syntax_error.eta` and the lexer is perfectly happy.
 `7:24` comes from the span the lexer attached, which is the payoff for carrying
 spans at all.
 
-`05` is the opposite and is deck 3 slide 47 verbatim. `x : int = a + true`
+`05` is the opposite and is the closing `Next` slide of deck 4 verbatim. `x : int = a + true`
 parses — `+` takes two expressions and `true` is one — so `--parse` prints a
 tree. `--validate` is what rejects it:
 
@@ -120,7 +120,7 @@ tree. `--validate` is what rejects it:
 Error: Typechecking failed: Type Error at 9:15.  Binary Operation with invalid Type! e1 : int e2 : bool
 ```
 
-That is the handoff to deck 4.
+That is the handoff to deck 5.
 
 ## Files in the compiler
 
@@ -147,8 +147,8 @@ the trace.
 ## Running them
 
 ```
-cargo run --bin rwetac  -- demos/3.4-parsing/PROG.eta   // compile to PROG.wat
-cargo run --bin runtime -- demos/3.4-parsing/PROG.wat   // run it
+cargo run --bin rwetac  -- demos/4.4-parsing/PROG.eta   // compile to PROG.wat
+cargo run --bin runtime -- demos/4.4-parsing/PROG.wat   // run it
 ```
 
 | Program | Result |

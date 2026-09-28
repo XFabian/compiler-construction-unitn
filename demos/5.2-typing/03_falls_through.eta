@@ -1,0 +1,10 @@
+// (IFELSE): the if gets lub(R1, R2). The then-branch returns (void), the
+// else-branch may continue (unit), so the whole if is unit -- and a function
+// with a return type needs a body that is void on every path.
+sign(x : int) : int {
+    if x > 0 {
+        return 1
+    } else {
+        x = 0 - x
+    }
+}

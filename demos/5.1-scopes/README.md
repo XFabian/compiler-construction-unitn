@@ -10,8 +10,7 @@ Run everything from the repository root.
 
 ```
 RUST_LOG=rwetac::resolver=trace cargo run -q --bin rwetac \
-    -- --validate demos/5.1-scopes/01_slides_example.eta 2>&1 \
-  | python3 demos/5.1-scopes/trim_scopes.py --body
+    -- --validate demos/5.1-scopes/01_slides_example.eta
 ```
 
 ```
