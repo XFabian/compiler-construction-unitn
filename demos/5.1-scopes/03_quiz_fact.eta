@@ -1,0 +1,10 @@
+// The first quiz: is this program semantically valid?
+// x = x - 1 is fine (parameters can be reassigned); result is not.
+fact(x : int) : int {
+    acc : int = 0
+    while (x > 0) {
+        acc = acc * x
+        x = x - 1
+    }
+    return result
+}

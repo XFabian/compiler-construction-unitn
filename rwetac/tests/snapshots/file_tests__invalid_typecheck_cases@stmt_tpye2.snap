@@ -1,5 +1,6 @@
 ---
 source: rwetac/tests/file_tests.rs
+assertion_line: 69
 expression: out
 ---
-Failure: Statment Statement { kind: Return([Expression { kind: Int(42), span: 55..57 }]), span: 48..54 } in Block had Statement Type Void but was not the last Stement in block
+Failure: This statement always returns, so the statements after it are unreachable

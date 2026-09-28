@@ -1,0 +1,10 @@
+// The program we resolved by hand: four names do not resolve (x, y, x, q).
+// The compiler reports only the first one and stops.
+fact(n : int) : int {
+    acc : int = 0
+    while (x > 0) {
+        acc = acc * y
+        x = q - 1
+    }
+    return acc
+}

@@ -1,0 +1,9 @@
+// Parameters live in their own scope, so the body may declare x again.
+// Watch lookup_curr(x) answer "free": it only looks at the body's map.
+fun(x : int) {
+    print(x)
+    x : int = 5
+    print(x)
+}
+
+print(v : int) {}

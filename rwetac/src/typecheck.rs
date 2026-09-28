@@ -394,10 +394,8 @@ impl Typechecker {
             let stmt_t = self.typecheck_statement(s, ret_t)?;
             if stmt_t != StatementType::Unit {
                 return Err(TypeError::Generic {
-                    msg: format!(
-                        "Statment {:?} in Block had Statement Type Void but was not the last Stement in block",
-                        s
-                    ),
+                    msg: "This statement always returns, so the statements after it are unreachable"
+                        .to_string(),
                     span: s.span.clone(),
                 });
             }
@@ -430,27 +428,7 @@ impl Typechecker {
                 }
             }
             StatementKind::Assign { lhs, rhs } => self.typecheck_assign(lhs, rhs, &stmt.span),
-            StatementKind::Compound(block) => {
-                if block.stmts.is_empty() {
-                    return Ok(StatementType::Unit);
-                }
-                let (last_stmt, preceding_stmts) = block.stmts.split_last().unwrap();
-                // All except last have to have type unit
-                for s in preceding_stmts {
-                    let stmt_t = self.typecheck_statement(s, ret_t)?;
-                    if stmt_t != StatementType::Unit {
-                        return Err(TypeError::Generic {
-                            msg: format!(
-                                "Statment {:?} in Block had Statement Type Void but was not the last Statement in block",
-                                s
-                            ),
-                            span: s.span.clone(),
-                        });
-                    }
-                }
-                // Result of Block is result of last stmt
-                self.typecheck_statement(last_stmt, ret_t)
-            }
+            StatementKind::Compound(block) => self.typecheck_block(block, ret_t),
             StatementKind::If {
                 guard,
                 then_br,
@@ -666,7 +644,7 @@ impl Typechecker {
     fn typecheck_arr_decl(&mut self, vd: &VarDeclaration) -> TypeResult {
         //Check out dimensions Convert dims with value to true empty ones to false
         // [1][][2] -> true, false, true
-        debug!("Isnide array initialzer");
+        debug!("Inside array initialzer");
         let dims_bool: Vec<bool> = vd.dims.iter().map(|d| d.is_some()).collect();
         if !Self::dim_check(&dims_bool) {
             return Err(TypeError::Generic {

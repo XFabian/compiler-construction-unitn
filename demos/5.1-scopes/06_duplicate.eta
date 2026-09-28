@@ -1,0 +1,6 @@
+// Only one definition per scope: here lookup_curr(x) finds the first x.
+f() : int {
+    x : int = 1
+    x : int = 2
+    return x
+}

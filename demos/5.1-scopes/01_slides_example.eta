@@ -1,0 +1,22 @@
+// The example from the StackMap slides, step for step.
+//
+// Run with RUST_LOG=rwetac::resolver=trace and the trace is the slides:
+// every push, pop, lookup and lookup_curr, with the stack after each.
+//
+// Two changes to make it compile: rwetac has no built-in print, so it is
+// declared below as an empty procedure, and fun returns i so it needs a type.
+glob : int = 5
+
+fun(x : int) : int {
+    y : int = x
+    x : int = glob
+    {
+        y : int = 5
+        z : int = y + x
+        print(z)
+    }
+    i : int = y + x
+    return i
+}
+
+print(v : int) {}
