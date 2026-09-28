@@ -5,6 +5,7 @@
 //! It is populated during typechecking and consumed by WTAC generation and the emitter.
 
 use std::collections::HashMap;
+use std::fmt;
 
 use crate::types::Type;
 
@@ -212,5 +213,27 @@ impl SymbolTable {
         for (key, val) in self.symbols.iter() {
             println!("K : {key}, V : {:?}", val);
         }
+    }
+}
+
+/// Prints the table as the typing context of the Eta spec:
+/// `Γ = { x.0 ↦ var int, f ↦ fn int -> int, Point ↦ record }`.
+/// Locals appear in declaration order (their numeric suffix), bare names first.
+impl fmt::Display for SymbolTable {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut entries: Vec<_> = self.symbols.iter().collect();
+        entries.sort_by_key(|(name, _)| {
+            let n = name.rsplit_once('.').map(|(_, n)| n.parse::<usize>().unwrap_or(0));
+            (n, (*name).clone())
+        });
+        let shown: Vec<String> = entries
+            .iter()
+            .map(|(name, e)| match &e.attr {
+                Attr::Local | Attr::Global => format!("{name} ↦ var {}", e.t),
+                Attr::Fun { .. } => format!("{name} ↦ fn {}", e.t),
+                Attr::Record(_) => format!("{name} ↦ record"),
+            })
+            .collect();
+        write!(f, "Γ = {{ {} }}", shown.join(", "))
     }
 }

@@ -110,10 +110,11 @@ impl Typechecker {
         for decl in &prog.decls {
             self.add_top_level(decl)?;
         }
-        debug!(sym_tab=?self.symtab,"Top-Level SymbolTable");
+        debug!(sym_tab = %self.symtab, "Top-Level SymbolTable");
         for decl in &prog.decls {
             self.typecheck_declarations(decl)?
         }
+        debug!(sym_tab = %self.symtab, "Final SymbolTable");
         Ok(())
     }
 

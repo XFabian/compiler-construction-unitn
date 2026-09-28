@@ -19,8 +19,9 @@
 //! the [`SymbolTable`](crate::symbols::SymbolTable), which use a flat namespace.
 
 use std::collections::HashMap;
+use std::fmt;
 
-use tracing::debug;
+use tracing::{debug, trace};
 
 use crate::ast::*;
 
@@ -67,6 +68,7 @@ impl StackMap {
     /// Pushes a new empty scope onto the stack (e.g. entering a block or function body).
     pub fn push(&mut self) {
         self.stack.push(HashMap::new());
+        trace!("push              {self}");
     }
 
     /// Pops the innermost scope (e.g. leaving a block).
@@ -76,7 +78,7 @@ impl StackMap {
     /// Panics if the stack is empty.
     pub fn pop(&mut self) {
         match self.stack.pop() {
-            Some(_) => (),
+            Some(_) => trace!("pop               {self}"),
             None => panic!("Internal Error: Tried to Pop empty Stack Map"),
         }
     }
@@ -89,6 +91,7 @@ impl StackMap {
             }
             None => panic!("Internal Error: Stack Map was empty"),
         }
+        trace!("add               {self}");
     }
 
     /// Looks up a name starting from the innermost scope and searching outward.
@@ -96,22 +99,52 @@ impl StackMap {
     /// Returns `None` if the name is not found in any scope.
     pub fn find(&self, k: &str) -> Option<&IdEntry> {
         // In reverse order. Since on top is innermost Scope
-        for map in self.stack.iter().rev() {
-            if let Some(entry) = map.get(k) {
-                return Some(entry);
-            }
-        }
-        None
+        let found = self.stack.iter().rev().find_map(|map| map.get(k));
+        let op = format!("lookup({k})");
+        trace!("{op:<18}-> {}", found.map_or("undefined", |e| &e.unique_name));
+        found
     }
 
     /// Looks up a name in the current scope only, without searching outer scopes.
     ///
     /// Used to detect duplicate declarations within the same scope.
     pub fn find_curr(&self, k: &str) -> Option<&IdEntry> {
-        match self.stack.last() {
-            Some(map) => map.get(k),
-            None => None,
-        }
+        let found = self.stack.last().and_then(|map| map.get(k));
+        let op = format!("lookup_curr({k})");
+        trace!("{op:<18}-> {}", found.map_or("free", |e| &e.unique_name));
+        found
+    }
+}
+
+/// Prints the stack in the lecture's notation, innermost scope last:
+/// `[glob, fun]::[x ↦ x.0]::[y ↦ y.1, x ↦ x.2]`. Renamed locals show their
+/// unique name; globals and functions keep their own and are shown bare.
+impl fmt::Display for StackMap {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let scopes: Vec<String> = self
+            .stack
+            .iter()
+            .map(|map| {
+                let mut entries: Vec<_> = map.iter().collect();
+                // A local's suffix is its declaration order; bare names first.
+                entries.sort_by_key(|(name, e)| {
+                    let n = e.unique_name.rsplit_once('.').map(|(_, n)| n.parse::<usize>().unwrap_or(0));
+                    (n, (*name).clone())
+                });
+                let shown: Vec<String> = entries
+                    .iter()
+                    .map(|(name, e)| {
+                        if **name == e.unique_name {
+                            name.to_string()
+                        } else {
+                            format!("{name} ↦ {}", e.unique_name)
+                        }
+                    })
+                    .collect();
+                format!("[{}]", shown.join(", "))
+            })
+            .collect();
+        write!(f, "{}", scopes.join("::"))
     }
 }
 
@@ -161,7 +194,7 @@ impl Resolver {
         p.decls
             .iter()
             .try_for_each(|d| self.resolve_only_top_level(d))?;
-        debug!(scope_map = ?self.scope_map, "Resolved Top Level");
+        debug!(scope_map = %self.scope_map, "Resolved Top Level");
         p.decls.iter_mut().try_for_each(|d| self.resolve_decl(d))
     }
 
@@ -237,7 +270,10 @@ impl Resolver {
         fun.body
             .stmts
             .iter_mut()
-            .try_for_each(|s| self.resolve_stmt(s))
+            .try_for_each(|s| self.resolve_stmt(s))?;
+        self.scope_map.pop(); // body
+        self.scope_map.pop(); // parameters
+        Ok(())
     }
 
     /// Resolves a record declaration.
@@ -330,6 +366,7 @@ impl Resolver {
                     .stmts
                     .iter_mut()
                     .try_for_each(|s| self.resolve_stmt(s))?;
+                self.scope_map.pop();
             }
             StatementKind::If {
                 guard,
@@ -338,7 +375,9 @@ impl Resolver {
             } => {
                 self.resolve_expr(guard)?;
                 self.resolve_stmt(then_br)?;
-                else_br.as_mut().map(|els| self.resolve_stmt(els.as_mut()));
+                if let Some(els) = else_br.as_mut() {
+                    self.resolve_stmt(els)?;
+                }
             }
             StatementKind::While { guard, body } => {
                 self.resolve_expr(guard)?;
