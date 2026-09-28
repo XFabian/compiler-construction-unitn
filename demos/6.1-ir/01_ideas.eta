@@ -1,0 +1,9 @@
+// The three examples of `AST to IR : Ideas`, in one function.
+f(A : int[], i : int) : int {
+    a : int = 1
+    b : int = 2
+    c : int = 2 + 3 + a + b
+    a, b = 2 + 3, c
+    x : int = A[i]
+    return x
+}
