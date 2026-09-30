@@ -96,7 +96,6 @@ This is the canonical shift/reduce conflict. A generator would report it and
 resolve it by preferring shift — which is the same answer, reached by a
 different route. Recursive descent does not report anything, because the code
 has no way to express the ambiguity in the first place.
-**the hand-written parser is not unambiguous, it is silently opinionated.**
 
 ### `04` and `05` — the two neighbours of a parse error
 
