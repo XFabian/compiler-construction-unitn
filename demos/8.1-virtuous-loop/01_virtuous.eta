@@ -1,0 +1,8 @@
+// The Virtuous Loops example: a = 7, b = 2 + 4, c = b, d = b + a, return d.
+f() : int {
+    a : int = 7
+    b : int = 2 + 4
+    c : int = b
+    d : int = b + a
+    return d
+}
