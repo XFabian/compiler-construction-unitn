@@ -130,7 +130,7 @@ impl WtacGen {
                     src1: ctr.clone(),
                     src2: e_res,
                     dst: guard.clone(),
-                    t: W::WType::I64,
+                    t: W::WType::I32,
                 };
                 // let guard = b.compare(W::BinaryOp::Lt, ctr.clone(), e_res, Type::Int);
 
@@ -286,7 +286,7 @@ impl WtacGen {
         };
 
         // First Loop
-        let guard = b.compare(W::BinaryOp::Lt, ctr.clone(), bound.clone(), W::WType::I64);
+        let guard = b.compare(W::BinaryOp::Lt, ctr.clone(), bound.clone());
 
         let mut setup = b.finish();
         let mut b = InstrBuilder::new(self);

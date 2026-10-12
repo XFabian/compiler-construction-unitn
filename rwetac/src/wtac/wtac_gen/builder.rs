@@ -70,7 +70,6 @@ impl<'a> InstrBuilder<'a> {
         op: W::BinaryOp,
         src1: W::Value,
         src2: W::Value,
-        operand_wt: W::WType,
     ) -> W::Value {
         // The result is a bool (i32) whatever the operands were.
         let dst = self.gene.make_wtac_var(W::WType::I32);
@@ -79,7 +78,7 @@ impl<'a> InstrBuilder<'a> {
             src1,
             src2,
             dst: dst.clone(),
-            t: operand_wt,
+            t: W::WType::I32,
         });
         dst
     }
