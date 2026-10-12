@@ -296,7 +296,7 @@ impl WtacGen {
 
         let w_f_type = W::WType::FunType {
             param_type: new_p_t,
-            ret_type: new_ret_t.map(Box::new),
+            ret_type: new_ret_t.clone().map(Box::new),
         };
         debug!("New Function Type: {}", w_f_type);
         // since f_data created here, we need to add rbp and rsp manually to locals
@@ -376,17 +376,12 @@ impl WtacGen {
         fin_fun_body.push(new_fin_body);
         fin_fun_body.extend(frame_end);
 
-        // Check the original return type to know if we need to copy a return val
+        // Return type after the rewrite: None when the result goes through ret_ptr
         let ret_val = W::Value::Var(RET_VAL_NAME.to_string()); // Name by convention!
-        let ret_instruction = match &ret_type[..] {
-            [] => W::Instruction::Return(None),
-            [t] => {
-                self.update_locals(RET_VAL_NAME, convert_type(t));
-                W::Instruction::Return(Some(ret_val))
-            }
-            [_, _b @ ..] => {
-                // A pointer to the return slot; Eta has no pointer type and it needs none.
-                self.update_locals(RET_VAL_NAME, W::WType::I32);
+        let ret_instruction = match new_ret_t {
+            None => W::Instruction::Return(None),
+            Some(t) => {
+                self.update_locals(RET_VAL_NAME, t);
                 W::Instruction::Return(Some(ret_val))
             }
         };

@@ -105,7 +105,7 @@ impl Instruction {
                 None => writeln!(f, "{}return", indent_str),
             },
             Instruction::Unary { op, src, dst, t } => {
-                writeln!(f, "{}{}: {} = {} {}", indent_str, dst, t, op, src)
+                writeln!(f, "{}{} : {} = {} {}", indent_str, dst, t, op, src)
             }
             Instruction::Binary {
                 op,
@@ -127,8 +127,8 @@ impl Instruction {
                     .map(|a| format!("{}", a))
                     .collect::<Vec<_>>()
                     .join(", ");
-                if let Some(d) = dst {
-                    writeln!(f, "{}{} = {}({})", indent_str, d, name, args_str)
+                if let Some((d, t)) = dst {
+                    writeln!(f, "{}{d} : {t} = {}({})", indent_str, name, args_str)
                 } else {
                     writeln!(f, "{}{}({})", indent_str, name, args_str)
                 }
@@ -148,7 +148,7 @@ impl Instruction {
                 writeln!(f, "{}}}", indent_str)
             }
             Instruction::Br(label) => writeln!(f, "{}br {}", indent_str, label),
-            Instruction::BrIf { cond, l } => writeln!(f, "{}br {} {}", indent_str, cond, l),
+            Instruction::BrIf { cond, l } => writeln!(f, "{}br_if {} {}", indent_str, cond, l),
         }
     }
 }

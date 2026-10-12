@@ -395,7 +395,7 @@ impl<W: Write> Emitter<W> {
                     .append(RcDoc::hardline())
                     .append(RcDoc::text(format!("call ${}", name)));
                 match dst {
-                    Some(d) => call_doc.append(RcDoc::hardline()).append(self.emit_dst(d)),
+                    Some((d, _t)) => call_doc.append(RcDoc::hardline()).append(self.emit_dst(d)),
                     None => call_doc,
                 }
             }

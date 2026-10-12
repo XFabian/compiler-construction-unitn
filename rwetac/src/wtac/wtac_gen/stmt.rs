@@ -175,11 +175,6 @@ impl WtacGen {
                     }
                 }
             }
-            instrs.push(W::Instruction::Copy {
-                src: store_ptr,
-                dst: W::Value::Var(RET_VAL_NAME.to_string()),
-                t: W::WType::I32,
-            });
             instrs.push(W::Instruction::Br("func_exit".to_string()));
             instrs
         }

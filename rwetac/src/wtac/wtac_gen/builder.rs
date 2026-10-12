@@ -114,11 +114,11 @@ impl<'a> InstrBuilder<'a> {
 
     /// `dst = name(args)`, returns dst
     pub(super) fn call(&mut self, name: &str, args: Vec<W::Value>, ret_wt: W::WType) -> W::Value {
-        let dst = self.gene.make_wtac_var(ret_wt);
+        let dst = self.gene.make_wtac_var(ret_wt.clone());
         self.instrs.push(W::Instruction::FCall {
             name: name.to_string(),
             args,
-            dst: Some(dst.clone()),
+            dst: Some((dst.clone(), ret_wt)),
         });
         dst
     }

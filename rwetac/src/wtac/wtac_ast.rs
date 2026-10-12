@@ -123,7 +123,7 @@ pub enum Instruction {
     FCall {
         name: String,
         args: Vec<Value>,
-        dst: Option<Value>,
+        dst: Option<(Value, WType)>,
     },
     /// A WASM `block` construct. A `Br` targeting this label jumps to
     /// *after* the block (forward branch).

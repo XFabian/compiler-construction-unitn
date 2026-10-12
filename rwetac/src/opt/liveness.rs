@@ -66,7 +66,7 @@ pub fn def_of_instr(instr: &W::Instruction) -> Option<String> {
         W::Instruction::Unary { dst, .. }
         | W::Instruction::Binary { dst, .. }
         | W::Instruction::Copy { dst, .. }
-        | W::Instruction::FCall { dst: Some(dst), .. } => {
+        | W::Instruction::FCall { dst: Some((dst, ..)), .. } => {
             match dst {
                 W::Value::Var(v) => Some(v.clone()),
                 _ => None, //  I may need to add stores here as well. For now works without as well

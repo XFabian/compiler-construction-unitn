@@ -105,7 +105,7 @@ impl Analysis for PointerAnalysis {
             } => {
                 // New Pointer is created
                 if name == "eta_malloc"
-                    && let W::Value::Var(ptr) = val
+                    && let (W::Value::Var(ptr), ..) = val
                 {
                     out_fact.insert(ptr.clone(), (ptr.clone(), 0));
                 }

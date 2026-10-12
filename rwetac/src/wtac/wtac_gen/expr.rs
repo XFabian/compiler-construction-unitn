@@ -143,7 +143,7 @@ impl WtacGen {
                 vec![W::Instruction::FCall {
                     name: name.to_string(),
                     args: arg_vals,
-                    dst: Some(dst.clone()),
+                    dst: Some((dst.clone(), convert_type(&ret_type))),
                 }],
                 dst,
             )
