@@ -1,0 +1,9 @@
+// Two return values: the caller passes memory in its own frame.
+g(n : int) : int, int {
+    return n, n + 1
+}
+
+h() : int {
+    a : int, b : int = g(3)
+    return a + b
+}

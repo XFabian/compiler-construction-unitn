@@ -1,0 +1,11 @@
+// Arrays live on the heap: allocation, literal, two dimensions, access.
+f(n : int) : int {
+    A : int[n]
+    A[0] = 7
+    B : int[] = {1, 2, 3}
+    F : bool[] = {true, false}
+    ok : bool = F[1]
+    M : int[2][3]
+    M[1][2] = 5
+    return length(A) + A[0] + B[1] + M[1][2]
+}

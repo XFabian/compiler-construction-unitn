@@ -1,0 +1,22 @@
+// Returning a record copies it into the caller's frame.
+// Returning an array returns a pointer.
+record Point {
+    x : int
+    y : int
+}
+
+mkPoint(a : int) : Point {
+    p : Point = Point(a, a + 1)
+    return p
+}
+
+mkArray(a : int) : int[] {
+    A : int[] = {a, a + 1}
+    return A
+}
+
+main() : int {
+    p : Point = mkPoint(3)
+    A : int[] = mkArray(3)
+    return p.y + A[1]
+}

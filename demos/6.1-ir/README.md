@@ -55,7 +55,7 @@ see a variable that the left already changed.
 
 ```
 tmp.8 : i64 = i.1 * 8:i64
-tmp.9: i32 = (i32) tmp.8
+tmp.9 : i32 = (i32) tmp.8
 tmp.10 : i32 = A.0 + tmp.9
 x.5 : i64 = [tmp.10 + 0]%i64
 ```
