@@ -49,7 +49,7 @@ pub fn eta_malloc(env: FunctionEnvMut<AllocatorEnv>, size: u32) -> u32 {
     *heap = new_ptr;
     ptr
 }
-
+#[allow(dead_code)]
 fn view_array(
     memory: &Memory,
     store: &Store,
@@ -101,6 +101,7 @@ fn view_array(
 /// * `start_address` - The starting memory address (offset) to read from.
 /// * `length` - The number of bytes to read.
 /// * `output_path` - The path to the file where the memory will be saved.
+#[allow(dead_code)]
 fn dump_memory_region(
     memory: &Memory,
     store: &Store,
@@ -212,13 +213,13 @@ fn main() -> anyhow::Result<()> {
         env_ref.data().heap_ptr.lock().unwrap()
     );
 
-    view_array(&memory, &store, start_heap as usize, 17, 8)?;
-    dump_memory_region(
-        &memory,
-        &store,
-        start_heap as u64, // Start address
-        200,               // Length in bytes
-        "memory_dump.bin", // Output file name
-    )?;
+    // view_array(&memory, &store, start_heap as usize, 17, 8)?;
+    // dump_memory_region(
+    //     &memory,
+    //     &store,
+    //     start_heap as u64, // Start address
+    //     200,               // Length in bytes
+    //     "memory_dump.bin", // Output file name
+    // )?;
     Ok(())
 }

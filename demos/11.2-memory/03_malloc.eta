@@ -1,0 +1,7 @@
+// Three allocations whose sizes are not all multiples of 8.
+main() : int {
+    a : bool[] = {true}         // 8 + 1 * 4 = 12 bytes
+    b : int[] = {1, 2}          // 8 + 2 * 8 = 24 bytes
+    c : bool[] = {true, false}  // 8 + 2 * 4 = 16 bytes
+    return length(a) + length(b) + length(c)
+}

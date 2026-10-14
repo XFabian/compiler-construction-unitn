@@ -1,0 +1,12 @@
+// A new program: predict the WASM before compiling it.
+calls : int = 0
+
+add(a : int, b : int) : int {
+    calls = calls + 1
+    return a + b
+}
+
+main() : int {
+    x : int = add(1, 2)
+    return add(x, calls)
+}

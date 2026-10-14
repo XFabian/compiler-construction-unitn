@@ -1,0 +1,18 @@
+// The quiz "Where does X live?": g, x, y, p and a, in the WASM.
+record Point {
+    x : int
+    y : int
+}
+
+g : int = 10
+
+foo(x : int) : int {
+    y : int = x + 1
+    p : Point = Point(x, y)
+    a : int[] = {1, 2, 3}
+    return y
+}
+
+main() : int {
+    return foo(g)
+}

@@ -3,6 +3,7 @@
 
 *.debug.*
 *.wat
+!demos/10.1-wasm/*.wat
 *.wasm
 rwetac/Dot_files
 

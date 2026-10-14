@@ -1,0 +1,20 @@
+// Three frames on the stack: main, outer and inner each hold one Point.
+record Point {
+    x : int
+    y : int
+}
+
+inner(n : int) : int {
+    r : Point = Point(n, n)
+    return r.x + r.y
+}
+
+outer(n : int) : int {
+    q : Point = Point(n, 0)
+    return inner(q.x + 1)
+}
+
+main() : int {
+    p : Point = Point(1, 2)
+    return outer(p.y) + p.x
+}

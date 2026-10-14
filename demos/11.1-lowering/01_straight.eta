@@ -1,0 +1,14 @@
+// Demo 7.1's program: you know its WTAC already. Now: the WASM.
+f(a : int, b : int, A : int[], i : int) : int {
+    z : int = a + b * 2         // nested expressions
+    c : bool = !(a < -b)        // unary
+    x : int = A[i]              // array access
+    x, x = x + 1, x * 4         // multi-assign
+    a, b = b, a                 // swap
+    return z + x
+}
+
+main() : int {
+    A : int[] = {10, 20}
+    return f(1, 2, A, 1)
+}
