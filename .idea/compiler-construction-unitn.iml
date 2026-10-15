@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/runtime/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/rwetac/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rwetac/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/demos/4.3-lexing/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
