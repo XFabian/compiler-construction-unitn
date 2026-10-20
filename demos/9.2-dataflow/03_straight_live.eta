@@ -1,0 +1,11 @@
+// "Liveness": one name, two values. Which a is live where?
+f() : int {
+    a : int = 1
+    b : int = a + 2
+    a = 7
+    return a + b
+}
+
+main() : int {
+    return f()
+}

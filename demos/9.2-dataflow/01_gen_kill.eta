@@ -1,0 +1,12 @@
+// "What a Node Does to Definitions": gen and kill on straight-line code.
+f() : int {
+    x : int = 5
+    y : int = x
+    x = 7
+    z : int = x + y
+    return z
+}
+
+main() : int {
+    return f()
+}

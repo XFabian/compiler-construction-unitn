@@ -1,0 +1,14 @@
+// Appel's loop (Modern Compiler Implementation, ch. 10), as a while loop.
+appel(c : int, n : int) : int {
+    a : int = 0
+    while (a < n) {
+        b : int = a + 1
+        c = c + b
+        a = b * 2
+    }
+    return c
+}
+
+main() : int {
+    return appel(0, 10)
+}
