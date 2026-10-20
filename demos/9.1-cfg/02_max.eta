@@ -1,0 +1,7 @@
+// Two returns, one exit: both store the result and jump to func_exit.
+max(a : int, b : int) : int {
+    if (a > b) {
+        return a
+    }
+    return b
+}

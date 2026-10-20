@@ -1,0 +1,10 @@
+// The running example of the CFG slides (From Code to CFG, Dominators).
+func(n : int, ctr : int) : int {
+    while (ctr > 0) {
+        if (n % 2 == 0) {
+            n = n * n
+        }
+        ctr = ctr - 1
+    }
+    return n
+}
