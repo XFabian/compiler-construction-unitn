@@ -19,7 +19,7 @@ use crate::lexer;
 use crate::opt::optimizer;
 use crate::parser;
 use crate::resolver::Resolver;
-use crate::setting::{Pipeline, Stage};
+use crate::setting::{FactsRequest, Pipeline, Stage};
 use crate::source_map::SourceMap;
 use crate::typecheck::Typechecker;
 use crate::wtac;
@@ -33,6 +33,8 @@ use anyhow::Context;
 /// When `pipeline` is `Some`, the WTAC IR is optimized with it before emission.
 /// When `count` is `true`, WTAC instruction counts are printed before and after
 /// optimization.
+/// When `facts` is `Some`, the facts of that analysis are printed for every
+/// function, before any pass runs. This needs a `pipeline`, even an empty one.
 ///
 /// The output `.wat` file is written next to the source file with the same
 /// name and a `.wat` extension.
@@ -47,6 +49,7 @@ pub fn compile(
     dump: bool,
     pipeline: Option<Pipeline>,
     count: bool,
+    facts: Option<FactsRequest>,
     src: &Path,
 ) -> anyhow::Result<()> {
     info!(file = %src.to_str().unwrap(), "Starting compilation");
@@ -160,7 +163,7 @@ pub fn compile(
             crate::log_separator!("Optimization");
 
             let _opt_span = span!(Level::INFO, "Optimization").entered();
-            let w_ast_opt = optimizer::optmize(w_ast, dump, &dump_dir, &pipeline);
+            let w_ast_opt = optimizer::optmize(w_ast, dump, &dump_dir, &pipeline, facts);
             let opt_path = crate::util::extend_file_name(&dump_dir, "_opt").unwrap();
 
             if dump {

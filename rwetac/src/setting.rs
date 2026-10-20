@@ -1,10 +1,11 @@
 //! Compiler configuration.
 //!
-//! Defines the [`Stage`] enum that controls how far the compilation pipeline runs
-//! and the [`Pipeline`] of optimization [`Pass`]es to apply.
+//! Defines the [`Stage`] enum that controls how far the compilation pipeline runs,
+//! the [`Pipeline`] of optimization [`Pass`]es to apply, and the
+//! [`FactsRequest`] for printing an analysis.
 //!
 //! [`Stage`] is selected via the `--parse`, `--validate`, `--wtac`, or `--codegen`
-//! command-line flags; the pipeline via `--passes`.
+//! command-line flags; the pipeline via `--passes`; the facts via `--facts`.
 
 use std::fmt;
 
@@ -165,6 +166,33 @@ impl fmt::Display for Pipeline {
             .collect();
         write!(f, "{}", parts.join(","))
     }
+}
+
+/// An analysis whose facts `--facts` can print.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, clap::ValueEnum)]
+pub enum FactsKind {
+    /// Reaching definitions: forward, merge with ∪.
+    Reaching,
+    /// Live variables: backward, merge with ∪.
+    Liveness,
+}
+
+impl FactsKind {
+    /// The name `--facts` accepts, also used in the file name of the dump.
+    pub fn name(self) -> &'static str {
+        match self {
+            FactsKind::Reaching => "reaching",
+            FactsKind::Liveness => "liveness",
+        }
+    }
+}
+
+/// What `--facts` asked for: which analysis, and whether to show the
+/// compiler's temporaries (`tmp.N`) too, which `--facts-all` turns on.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct FactsRequest {
+    pub kind: FactsKind,
+    pub all: bool,
 }
 
 /// Splits on commas that are not inside parentheses, so `fixpoint(a,b)` stays

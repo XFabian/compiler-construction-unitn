@@ -13,6 +13,7 @@
 //! rwetac --passes cf,dce program.eta    # Run just these two passes, in this order
 //! rwetac --passes 'fixpoint(cp,cf)' program.eta   # Repeat until nothing changes
 //! rwetac --opt --count program.eta      # Report WTAC instruction counts before and after
+//! rwetac --facts reaching program.eta   # Print reaching definitions next to each instruction
 //! ```
 //!
 //! The `--dump` flag writes intermediate representations to a `<file>_debug/` directory,
@@ -23,7 +24,7 @@ use clap::Parser;
 use std::path;
 
 use rwetac::compile;
-use rwetac::setting::{Pass, Pipeline, Stage};
+use rwetac::setting::{FactsKind, FactsRequest, Pass, Pipeline, Stage};
 use tracing_subscriber::EnvFilter;
 use tracing_subscriber::fmt::format::FmtSpan;
 #[derive(Parser, Debug)]
@@ -71,6 +72,15 @@ struct Cli {
     /// Print WTAC instruction counts before and after optimization
     #[arg(long)]
     count: bool,
+
+    /// Print the facts of one analysis next to each WTAC instruction, before
+    /// any optimization. Written to [file]_debug/ with --dump.
+    #[arg(long, value_enum, value_name = "ANALYSIS")]
+    facts: Option<FactsKind>,
+
+    /// With --facts: also show the compiler's temporaries (tmp.N)
+    #[arg(long, requires = "facts")]
+    facts_all: bool,
 }
 
 impl Cli {
@@ -88,14 +98,23 @@ impl Cli {
     }
 
     /// `--passes` wins over `--opt`; with neither, nothing is optimized.
+    /// `--facts` alone needs the CFG, so it gets the empty pipeline.
     fn pipeline(&self) -> anyhow::Result<Option<Pipeline>> {
         match &self.passes {
             Some(spec) => Pipeline::parse(spec)
                 .map(Some)
                 .map_err(|e| anyhow::anyhow!("Invalid --passes: {e}")),
             None if self.opt => Ok(Some(Pipeline::default_full())),
+            None if self.facts.is_some() => Ok(Some(Pipeline::default())),
             None => Ok(None),
         }
+    }
+
+    fn facts(&self) -> Option<FactsRequest> {
+        self.facts.map(|kind| FactsRequest {
+            kind,
+            all: self.facts_all,
+        })
     }
 }
 
@@ -128,7 +147,14 @@ fn main() -> anyhow::Result<()> {
         .with_span_events(FmtSpan::ENTER)
         .init();
 
-    compile::compile(args.stage(), args.dump, pipeline, args.count, path)?;
+    compile::compile(
+        args.stage(),
+        args.dump,
+        pipeline,
+        args.count,
+        args.facts(),
+        path,
+    )?;
 
     Ok(())
 }

@@ -53,6 +53,17 @@ impl Analysis for ReachingAnalysis {
         super::solver::Direction::Forwards
     }
 
+    /// `x.0@4005`: `x.0` defined by instruction 4005. Parameters and globals
+    /// enter with id 0 (see `init_facts`) and print as `x.0@entry`.
+    fn describe_fact(&self, fact: &Self::Fact) -> Vec<String> {
+        fact.iter()
+            .map(|(id, var)| match id {
+                0 => format!("{var}@entry"),
+                _ => format!("{var}@{id}"),
+            })
+            .collect()
+    }
+
     fn initial_fact(&self) -> Self::Fact {
         HashSet::new()
     }

@@ -96,6 +96,7 @@ fn valid_cases() {
                 false,
                 pipeline,
                 false,
+                None,
                 &path,
             ) {
                 panic!("{name} (opt={opt}): compilation failed: {e:?}");

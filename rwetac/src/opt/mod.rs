@@ -10,6 +10,7 @@
 
 pub mod cfg;
 pub mod dominators;
+pub mod facts;
 pub mod liveness;
 pub mod memory;
 pub mod optimizer;

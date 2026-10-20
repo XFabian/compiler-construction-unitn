@@ -111,6 +111,11 @@ impl Analysis for LivenessAnalysis {
         super::solver::Direction::Backwards
     }
 
+    /// The live variables by name.
+    fn describe_fact(&self, fact: &Self::Fact) -> Vec<String> {
+        fact.iter().cloned().collect()
+    }
+
     fn initial_fact(&self) -> Self::Fact {
         HashSet::new()
     }

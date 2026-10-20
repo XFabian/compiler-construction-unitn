@@ -1,0 +1,28 @@
+---
+source: rwetac/tests/facts.rs
+expression: "facts_of(src, \"f\", FactsKind::Reaching)"
+---
+f: reaching definitions (forward)
+
+Block 1 (entry)   -> 2
+                                                           {}
+
+Block 2 func_exit   <- 1   -> 0
+                                                           {}
+  2000: tmp.0 : i32 = __stack_pointer                      {}
+  2001: __stack_pointer : i32 = __stack_pointer - 0:i32    {}
+  2002: tmp.1 : i32 = __stack_pointer                      {}
+  2003: x.0 : i64 = 5:i64                                  {x.0@2003}
+  2004: y.1 : i64 = x.0                                    {x.0@2003, y.1@2004}
+  2005: tmp.2 : i64 = 7:i64                                {x.0@2003, y.1@2004}
+  2006: x.0 : i64 = tmp.2                                  {x.0@2006, y.1@2004}
+  2007: tmp.3 : i64 = x.0 + y.1                            {x.0@2006, y.1@2004}
+  2008: z.2 : i64 = tmp.3                                  {x.0@2006, y.1@2004, z.2@2008}
+  2009: __ret_val : i64 = z.2                              {__ret_val@2009, x.0@2006, y.1@2004, z.2@2008}
+  2010: br func_exit                                       {__ret_val@2009, x.0@2006, y.1@2004, z.2@2008}
+  2011: br func_exit                                       {__ret_val@2009, x.0@2006, y.1@2004, z.2@2008}
+
+Block 0 merge_func_exit (exit)   <- 2
+                                                           {__ret_val@2009, x.0@2006, y.1@2004, z.2@2008}
+  1: __stack_pointer : i32 = tmp.0                         {__ret_val@2009, x.0@2006, y.1@2004, z.2@2008}
+  2: return __ret_val                                      {__ret_val@2009, x.0@2006, y.1@2004, z.2@2008}

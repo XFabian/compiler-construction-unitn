@@ -49,6 +49,7 @@ fn run_wasm(src_path: &Path, opt: bool) -> Result<Vec<Value>, Box<dyn std::error
         false,
         pipeline,
         false,
+        None,
         src_path,
     )?;
 

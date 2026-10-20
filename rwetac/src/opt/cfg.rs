@@ -253,6 +253,43 @@ impl Cfg {
         self.exit_id
     }
 
+    /// The block ids in reverse postorder from the entry: every block comes
+    /// before its successors, except along back edges. Blocks the entry
+    /// cannot reach come last, by id.
+    pub fn reverse_postorder(&self) -> Vec<usize> {
+        let mut visited = HashSet::from([self.entry_id]);
+        let mut postorder = Vec::new();
+        // A depth-first search as a loop instead of recursion. Each entry is
+        // a block and the position in its `succs` of the successor to visit
+        // next: (b, 1) means b's first successor is done, its second is next.
+        let mut stack = vec![(self.entry_id, 0)];
+        while let Some(&(block, next_succ)) = stack.last() {
+            match self.get_block(block).succs.get(next_succ) {
+                Some(&succ) => {
+                    stack.last_mut().unwrap().1 += 1;
+                    if visited.insert(succ) {
+                        stack.push((succ, 0));
+                    }
+                }
+                // All successors done: the block is finished.
+                None => {
+                    postorder.push(block);
+                    stack.pop();
+                }
+            }
+        }
+        postorder.reverse();
+        let mut unreachable: Vec<usize> = self
+            .blocks
+            .keys()
+            .filter(|b| !visited.contains(b))
+            .copied()
+            .collect();
+        unreachable.sort();
+        postorder.extend(unreachable);
+        postorder
+    }
+
     pub fn add_edge(from: &mut BasicBlock, to: &mut BasicBlock) {
         from.update_succs(to.id);
         to.update_preds(from.id);

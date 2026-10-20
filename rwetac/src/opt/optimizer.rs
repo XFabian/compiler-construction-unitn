@@ -14,8 +14,8 @@ use crate::opt::liveness::LivenessAnalysis;
 use crate::opt::memory::{AvailableLoadAnalysis, PointerAnalysis};
 use crate::opt::reaching::ReachingAnalysis;
 use crate::opt::solver::Solver;
-use crate::opt::{liveness, memory, reaching, reconstruct_cfg};
-use crate::setting::{Pass, Pipeline, PipelineItem};
+use crate::opt::{facts, liveness, memory, reaching, reconstruct_cfg};
+use crate::setting::{FactsRequest, Pass, Pipeline, PipelineItem};
 use crate::wtac::wtac_ast::{self as W, Program, TopLevel};
 
 // Main entry Point
@@ -258,6 +258,7 @@ fn optimize_function(
     dump: bool,
     dump_path: &std::path::Path,
     pipeline: &Pipeline,
+    facts: Option<FactsRequest>,
 ) -> TopLevel {
     match tl {
         TopLevel::Function {
@@ -295,6 +296,20 @@ fn optimize_function(
                     .expect("File creation failed in CFG");
             }
 
+            // The facts of the program as written, before any pass runs.
+            // `length` is built in, not part of the program.
+            if let Some(request) = facts
+                && name != "length"
+            {
+                let fact_dump = facts::run(&cfg, request);
+                if dump {
+                    facts::write_file(&fact_dump, dump_path, request.kind)
+                        .expect("Writing the facts failed");
+                } else {
+                    println!("{fact_dump}");
+                }
+            }
+
             run_pipeline(&mut cfg, pipeline);
             // Reconstruct
             let mut dominators = dominators::compute_dominators(&cfg);
@@ -326,6 +341,7 @@ pub fn optmize(
     dump: bool,
     dump_path: &std::path::Path,
     pipeline: &Pipeline,
+    facts: Option<FactsRequest>,
 ) -> W::Program {
     info!("Starting optimizations with pipeline: {pipeline}");
     let (mut globals, functions): (Vec<_>, Vec<_>) = prog
@@ -342,7 +358,7 @@ pub fn optmize(
 
     let opt_code: Vec<TopLevel> = functions
         .into_iter()
-        .map(|f| optimize_function(f, &globals, dump, dump_path, pipeline))
+        .map(|f| optimize_function(f, &globals, dump, dump_path, pipeline, facts))
         .collect();
     // Pop stack pointer...
     globals.pop();

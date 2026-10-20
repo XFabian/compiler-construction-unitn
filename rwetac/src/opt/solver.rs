@@ -14,6 +14,7 @@ use crate::opt::cfg::Cfg;
 use crate::wtac::wtac_ast as W;
 
 /// Whether a dataflow analysis propagates information forward or backward.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Direction {
     Forwards,
     Backwards,
@@ -48,6 +49,13 @@ pub trait Analysis {
 
     /// The initial (bottom/top) fact for all blocks before iteration begins.
     fn initial_fact(&self) -> Self::Fact;
+
+    /// A fact as text, one string per element: a definition, a variable.
+    /// Only printing uses it (`--facts`), so the analysis itself never
+    /// depends on how its facts look.
+    fn describe_fact(&self, fact: &Self::Fact) -> Vec<String> {
+        vec![format!("{fact:?}")]
+    }
 
     /// Initializes the in/out fact maps for the entire CFG.
     ///
@@ -245,13 +253,13 @@ impl<'a, A: Analysis> Solver<'a, A> {
 
         match A::direction() {
             Direction::Forwards => {
-                let initial_fact = self.block_out(block_id);
-                let (map, _) = block.lab_instructions.iter().rfold(
+                let initial_fact = self.block_in(block_id);
+                let (map, _) = block.lab_instructions.iter().fold(
                     (HashMap::new(), initial_fact.clone()),
                     |(mut map, fact), (i, instr)| {
-                        // Compute OUT Fact for current instruction
+                        // OUT of this instruction is the IN of the next one
                         let out_fact = self.analysis.flow(&fact, (*i, instr));
-                        map.insert(*i, fact.clone());
+                        map.insert(*i, out_fact.clone());
                         (map, out_fact)
                     },
                 );
