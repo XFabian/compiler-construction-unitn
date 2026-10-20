@@ -1,0 +1,28 @@
+// 20 values live at once: more than x86-64 has registers.
+f(x : int) : int {
+    a : int = x * 2
+    b : int = x * 3
+    c : int = x * 4
+    d : int = x * 5
+    e : int = x * 6
+    f : int = x * 7
+    g : int = x * 8
+    h : int = x * 9
+    i : int = x * 10
+    j : int = x * 11
+    k : int = x * 12
+    l : int = x * 13
+    m : int = x * 14
+    n : int = x * 15
+    o : int = x * 16
+    p : int = x * 17
+    q : int = x * 18
+    r : int = x * 19
+    s : int = x * 20
+    t : int = x * 21
+    return a + (b + (c + (d + (e + (f + (g + (h + (i + (j + (k + (l + (m + (n + (o + (p + (q + (r + (s + t))))))))))))))))))
+}
+
+main() : int {
+    return f(1)
+}

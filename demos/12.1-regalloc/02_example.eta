@@ -1,0 +1,13 @@
+// The running example again, now through rwetac and Wasmtime.
+f(x : int) : int {
+    a : int = x + 1
+    b : int = x * 2
+    c : int = b + 1
+    d : int = c * 2
+    e : int = b + d
+    return a + e
+}
+
+main() : int {
+    return f(5)
+}
