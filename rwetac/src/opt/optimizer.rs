@@ -143,7 +143,8 @@ fn eliminate_dead_blocks(
 
 /// Runs reaching definitions analysis and builds use-def/def-use chains.
 fn run_reach(cfg: &cfg::Cfg) -> (reaching::UseDef, reaching::DefUse) {
-    let mut solver_reach = Solver::new(cfg, ReachingAnalysis);
+    let reach_ana = ReachingAnalysis::new(cfg);
+    let mut solver_reach = Solver::new(cfg, reach_ana);
     solver_reach.solve();
     let res_reach = solver_reach.into_results();
 
@@ -173,7 +174,8 @@ fn run_pass(cfg: &mut Cfg, pass: Pass) -> bool {
         }
         Pass::Cf => reaching::constant_folding(cfg),
         Pass::Dce => {
-            let mut solver = Solver::new(cfg, LivenessAnalysis);
+            let live_ana = LivenessAnalysis::new(cfg);
+            let mut solver = Solver::new(cfg, live_ana);
             solver.solve();
             let res = solver.into_results();
             liveness::dce(cfg, &res)

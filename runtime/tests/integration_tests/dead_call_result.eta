@@ -1,0 +1,11 @@
+// EXPECT: 42
+// DCE: r is never read, but the call writes the array.
+set(a : int[]) : int {
+    a[0] = 42
+    return 0
+}
+main() : int {
+    a : int[1]
+    r : int = set(a)
+    return a[0]
+}

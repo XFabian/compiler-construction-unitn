@@ -57,12 +57,14 @@ pub struct InstrFacts {
 pub fn run(cfg: &Cfg, request: FactsRequest) -> FactDump {
     match request.kind {
         FactsKind::Reaching => {
-            let results = solve(cfg, ReachingAnalysis);
-            collect(cfg, &ReachingAnalysis, &results, "reaching definitions", request.all)
+            let reach_ana = ReachingAnalysis::new(cfg);
+            let results = solve(cfg, reach_ana.clone());
+            collect(cfg, &reach_ana, &results, "reaching definitions", request.all)
         }
         FactsKind::Liveness => {
-            let results = solve(cfg, LivenessAnalysis);
-            collect(cfg, &LivenessAnalysis, &results, "live variables", request.all)
+            let live_ana = LivenessAnalysis::new(cfg);
+            let results = solve(cfg, live_ana.clone());
+            collect(cfg, &live_ana, &results, "live variables", request.all)
         }
     }
 }

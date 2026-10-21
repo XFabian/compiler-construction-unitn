@@ -1,0 +1,7 @@
+// EXPECT: trap
+// DCE: x is never read, but the division traps.
+main() : int {
+    d : int = 0
+    x : int = 10 / d
+    return 1
+}

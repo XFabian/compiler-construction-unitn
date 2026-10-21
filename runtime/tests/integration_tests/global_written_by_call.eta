@@ -1,0 +1,12 @@
+// EXPECT: 9
+// Reaching definitions: the call writes glob, so the 8 must not be propagated.
+glob : int = 0
+bump() : int {
+    glob = glob + 1
+    return 0
+}
+main() : int {
+    glob = 8
+    r : int = bump()
+    return glob + r
+}

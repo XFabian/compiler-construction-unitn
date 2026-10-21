@@ -14,7 +14,7 @@ use tracing::{debug, instrument};
 
 use crate::opt::cfg::Cfg;
 use crate::opt::solver::{Analysis, AnalysisResults};
-use crate::wtac::wtac_ast as W;
+use crate::wtac::wtac_ast::{self as W, BinaryOp, Instruction};
 
 /// Returns the set of variables used (read) by an instruction.
 pub fn uses_of_instr(instr: &W::Instruction) -> Vec<String> {
@@ -77,7 +77,17 @@ pub fn def_of_instr(instr: &W::Instruction) -> Option<String> {
 }
 
 /// Backward may analysis: computes the set of live variables at each program point.
-pub struct LivenessAnalysis;
+#[derive(Debug, Clone)]
+pub struct LivenessAnalysis {
+    globals : HashSet<String>
+}
+
+impl LivenessAnalysis {
+    
+    pub fn new(cfg : & Cfg) -> Self {
+        LivenessAnalysis { globals: cfg.globals.keys().cloned().collect() }
+    }
+}
 // Probably dont need to own the strings inside here &'a str may be better
 impl Analysis for LivenessAnalysis {
     /// The set of variable names that are live.
@@ -97,10 +107,20 @@ impl Analysis for LivenessAnalysis {
     fn flow(&self, out_fact: &Self::Fact, lab_instr: (usize, &W::Instruction)) -> Self::Fact {
         let mut in_fact = out_fact.clone();
 
+        
+
+
         // KILLS defined variable from fact
         if let Some(def) = def_of_instr(lab_instr.1) {
             in_fact.remove(&def);
         }
+
+        // Special case. The Callee may read any global, so a call uses all of them
+        if let Instruction::FCall { .. } = lab_instr.1 {
+            // Add all globals here and assume the call uses all of them
+            in_fact.extend(self.globals.iter().cloned());
+        }
+
         // GEN set
         let used_vars = uses_of_instr(lab_instr.1);
         in_fact.extend(used_vars);
@@ -142,6 +162,12 @@ impl Analysis for LivenessAnalysis {
     }
 }
 
+/// Instructions with side effects cannot be removed even when they are dead
+/// Div and Mod can trap (Div by 0)
+pub fn has_side_effect(instr : &Instruction) -> bool {
+    matches!(instr, Instruction::FCall { .. } | Instruction::Binary { op : BinaryOp::Div |  BinaryOp::Mod, .. })
+}
+
 /// Removes instructions that define a variable which is dead after that point.
 ///
 /// Returns `true` if any instructions were removed (the caller should re-run
@@ -159,7 +185,7 @@ pub fn dce(cfg: &mut Cfg, res_ana: &AnalysisResults<LivenessAnalysis>) -> bool {
             if let Some(var) = def_of_instr(instr) {
                 // If it is not in live set afterwards the var is never used!
                 // println!("DCE: At instruction : {}", instr);
-                if !out_fact.contains(&var) {
+                if !out_fact.contains(&var) && !has_side_effect(instr) {
                     changed = true;
                     debug!("Deleting {}", instr);
                     // false removes it in retain

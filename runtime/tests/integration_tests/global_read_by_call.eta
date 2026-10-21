@@ -1,0 +1,13 @@
+// EXPECT: 5
+// Liveness: show() reads g, so g = 5 is not dead before the call.
+g : int = 0
+seen : int = 0
+show() {
+    seen = g
+}
+main() : int {
+    g = 5
+    show()
+    g = 6
+    return seen
+}

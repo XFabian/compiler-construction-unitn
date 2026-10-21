@@ -14,13 +14,24 @@ use tracing::{debug, instrument};
 use crate::opt::cfg::Cfg;
 use crate::opt::liveness;
 use crate::opt::solver::{Analysis, AnalysisResults};
-use crate::wtac::wtac_ast::{self as W, BinaryOp, UnaryOp, Value};
+use crate::wtac::wtac_ast::{self as W, BinaryOp, Instruction, UnaryOp, Value};
 
 /// A definition: `(instruction_id, variable_name)`.
 type Def = (usize, String);
 
 /// Forward may analysis: computes which definitions reach each program point.
-pub struct ReachingAnalysis;
+#[derive(Debug, Clone)]
+pub struct ReachingAnalysis {
+    globals : HashSet<String>,
+}
+
+impl ReachingAnalysis {
+
+    pub fn new(cfg : &Cfg) -> Self {
+        ReachingAnalysis { globals: cfg.globals.keys().cloned().collect() }
+    }
+}
+
 impl Analysis for ReachingAnalysis {
     /// Set of definitions `(instruction_id, variable_name)` that reach this point.
     type Fact = HashSet<Def>;
@@ -38,7 +49,14 @@ impl Analysis for ReachingAnalysis {
     fn flow(&self, out_fact: &Self::Fact, lab_instr: (usize, &W::Instruction)) -> Self::Fact {
         let mut out_fact = out_fact.clone();
 
-        // KILLS Remove all previouise defs of variable
+        // Special case. Calls can change global variables. Thus, kill all global definitinos here and add the new defitions from the call
+        if let Instruction::FCall { .. } = lab_instr.1 {
+            // kill all global definitions
+            out_fact.retain(|(_, var)| !self.globals.contains(var));
+            // Add all globals here and assume the call changed all of them. 
+            out_fact.extend(self.globals.iter().map(|g| (lab_instr.0, g.clone())));
+        }
+        // KILLS Remove all previous defs of variable
         if let Some(def) = liveness::def_of_instr(lab_instr.1) {
             out_fact.retain(|(_, var)| *var != def);
         }
