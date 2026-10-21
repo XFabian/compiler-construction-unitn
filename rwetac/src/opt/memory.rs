@@ -18,7 +18,7 @@ use tracing::{debug, instrument, warn};
 use crate::opt::cfg::Cfg;
 use crate::opt::liveness;
 use crate::opt::solver::{Analysis, AnalysisResults};
-use crate::wtac::wtac_ast as W;
+use crate::wtac::wtac_ast::{self as W, WType};
 
 // tmp.11 : i32 = tmp.8 + 8:i64
 // [tmp.10 + 0] : i64 = [tmp.11 + 0]
@@ -249,9 +249,17 @@ pub struct MemLocation {
     offset: usize,
     wt: W::WType,
 }
+
+fn width( t : &WType) -> usize {
+    match t {
+        WType::I32 => 4,
+        WType::I64 => 8,
+        WType::FunType { .. } => panic!("Width of a Function Type not defined"),
+    }
+}
+
 // Map from base, offset -> Value
 // Tracks the array pointers
-// Function calls are black boxes. (I do not think they can change the memory in our case but lets be conservative here)
 /// Forward must analysis: tracks available loads.
 ///
 /// A load from a memory location is *available* if the value has already been
@@ -278,15 +286,16 @@ impl Analysis for AvailableLoadAnalysis {
 
         result
     }
+
+    
     //
     fn flow(&self, out_fact: &Self::Fact, lab_instr: (usize, &W::Instruction)) -> Self::Fact {
         let mut out_fact = out_fact.clone();
 
         // KILLS
-        // Any Assignment to Variable x mut kill all memory facts taht use x
-        // Right now independent of base
+        // Checks if the base pointer changed or the value of the fact actually changed (was reassigned). So the variable that was stored changed
         if let Some(def) = liveness::def_of_instr(lab_instr.1) {
-            out_fact.retain(|loc, _| loc.base != def);
+            out_fact.retain(|loc, val| loc.base != def && *val != W::Value::Var(def.clone()));
         }
 
         // A callee can store through any pointer it was handed and through any
@@ -310,11 +319,11 @@ impl Analysis for AvailableLoadAnalysis {
                 wt: t.clone(),
             };
 
-            // KILL all loads to specific locatoin
+            // KILL all loads to specific location
             out_fact.remove(&loc);
-            // Conservative: Kill al facts with same base pointer and diffrent offsets
-            // because of aliasing
-            out_fact.retain(|l, _| l.base != *name);
+            // Different bases may point to the same array (aliasing), so only facts at the same base with a non-overlapping offset survive a store.
+            // Check that the ranges of the offsets do not overlap 
+            out_fact.retain(|l, _| l.base == *name && (l.offset + width(&l.wt) <= *offset || offset + width(t) <= l.offset));
 
             // Insert the new load
             out_fact.insert(loc, val.clone());

@@ -1,0 +1,11 @@
+// EXPECT: 2
+// Store-to-load forwarding: a and b are the same array, so b[0] = 2 overwrites a[0].
+f(a : int[], b : int[]) : int {
+    a[0] = 1
+    b[0] = 2
+    return a[0]
+}
+main() : int {
+    x : int[1]
+    return f(x, x)
+}
