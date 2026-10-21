@@ -1,0 +1,12 @@
+// EXPECT: 5
+// Copy propagation: set() writes g, so y = g is not available after the call.
+g : int = 5
+set() : int {
+    g = 7
+    return 0
+}
+main() : int {
+    y : int = g
+    r : int = set()
+    return y + r
+}

@@ -8,13 +8,14 @@ use std::collections::HashSet;
 
 use tracing::{debug, info, warn};
 
+use crate::opt::copies::AvailableCopiesAnalysis;
 use crate::opt::cfg::{self, Cfg};
 use crate::opt::dominators::{self};
 use crate::opt::liveness::LivenessAnalysis;
 use crate::opt::memory::{AvailableLoadAnalysis, PointerAnalysis};
 use crate::opt::reaching::ReachingAnalysis;
 use crate::opt::solver::Solver;
-use crate::opt::{facts, liveness, memory, reaching, reconstruct_cfg};
+use crate::opt::{copies, facts, liveness, memory, reaching, reconstruct_cfg};
 use crate::setting::{FactsRequest, Pass, Pipeline, PipelineItem};
 use crate::wtac::wtac_ast::{self as W, Program, TopLevel};
 
@@ -169,8 +170,11 @@ fn run_pass(cfg: &mut Cfg, pass: Pass) -> bool {
             reaching::constant_propagation(cfg, &use_def)
         }
         Pass::Copy => {
-            let (use_def, _def_use) = run_reach(cfg);
-            reaching::copy_propagation(cfg, &use_def)
+            let avail_copies_ana = AvailableCopiesAnalysis::new(cfg);
+            let mut solver_copies = Solver::new(cfg, avail_copies_ana);
+            solver_copies.solve();
+            let res_copies = solver_copies.into_results();
+            copies::copy_propagation(cfg, &res_copies)
         }
         Pass::Cf => reaching::constant_folding(cfg),
         Pass::Dce => {

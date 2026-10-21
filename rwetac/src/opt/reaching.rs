@@ -5,7 +5,8 @@
 //! analysis.
 //!
 //! The analysis results are used to build use-def and def-use chains, which
-//! in turn drive constant propagation and copy propagation.
+//! in turn drive constant propagation. Copy propagation uses available copies
+//! instead (see [`super::copies`]).
 
 use std::collections::{HashMap, HashSet};
 
@@ -261,64 +262,6 @@ pub fn constant_propagation(cfg: &mut Cfg, use_def: &UseDef) -> bool {
     changed
 }
 
-/// Replaces variable uses with the source of a copy when all reaching definitions
-/// are copies from the same variable.
-#[instrument(skip(cfg, use_def), level = "Debug")]
-pub fn copy_propagation(cfg: &mut Cfg, use_def: &UseDef) -> bool {
-    let mut changed = false;
-    let copy_map = build_copy_map(cfg);
-    for (_, block) in cfg.blocks.iter_mut() {
-        for (i, instr) in block.lab_instructions.iter_mut() {
-            let uses = liveness::uses_of_instr(instr);
-            for var in uses {
-                let use_key = (*i, var.clone());
-                if let Some(defs) = use_def.get(&use_key) {
-                    let copy_vec: Vec<&String> = defs
-                        .iter()
-                        .filter_map(|(def_id, _)| copy_map.get(def_id))
-                        .collect();
-                    // Number of denfitoins and copies match and they are all copies from the same Source!
-                    if !copy_vec.is_empty()
-                        && copy_vec.len() == defs.len()
-                        && copy_vec.iter().all(|&v| *v == *copy_vec[0])
-                        && var != *copy_vec[0]
-                    // Otherwise a = a is substituted infinitely
-                    {
-                        debug!(
-                            "Instruction: {}:{}. Replacing {} With {}",
-                            i, instr, var, copy_vec[0]
-                        );
-                        let old_instr = instr.clone();
-                        rewrite_instr(instr, &var, &W::Value::Var(copy_vec[0].clone()));
-                        debug!("{} -> {}", old_instr, instr);
-                        changed = true;
-                    }
-                }
-            }
-        }
-    }
-    changed
-}
-
-/// Builds a map from instruction ID to the source variable name for all
-/// simple copy instructions (e.g. `x = y`).
-///
-/// Used by [`copy_propagation`] to determine what to substitute.
-fn build_copy_map(cfg: &Cfg) -> HashMap<usize, String> {
-    let mut copy_map = HashMap::new();
-    for block in cfg.blocks.values() {
-        for (instr_id, instr) in &block.lab_instructions {
-            if let W::Instruction::Copy {
-                src: W::Value::Var(src_name),
-                ..
-            } = instr
-            {
-                copy_map.insert(*instr_id, src_name.clone());
-            }
-        }
-    }
-    copy_map
-}
 
 /// Replaces binary and unary operations on constant operands with their
 /// computed result. Also simplifies identity operations like `x + 0` and `x - 0`.
