@@ -56,6 +56,8 @@ impl fmt::Display for ParserError {
     }
 }
 
+impl std::error::Error for ParserError {}
+
 /// Convenience alias for parser results.
 type PResult<T> = Result<T, ParserError>;
 

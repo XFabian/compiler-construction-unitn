@@ -69,6 +69,18 @@ pub enum TypeError {
     Generic { msg: String, span: logos::Span },
 }
 
+impl std::fmt::Display for TypeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            TypeError::MismatchedTypes { msg, .. } | TypeError::Generic { msg, .. } => {
+                write!(f, "{}", msg)
+            }
+        }
+    }
+}
+
+impl std::error::Error for TypeError {}
+
 type TypeResult = Result<(), TypeError>;
 
 /// The typechecker for the ETA language.

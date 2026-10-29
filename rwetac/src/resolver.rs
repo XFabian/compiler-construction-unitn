@@ -26,10 +26,19 @@ use tracing::{debug, trace};
 use crate::ast::*;
 
 /// An error produced during resolution.
+#[derive(Debug)]
 pub struct ResolveError {
     pub msg: String,
     pub span: logos::Span,
 }
+
+impl fmt::Display for ResolveError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.msg)
+    }
+}
+
+impl std::error::Error for ResolveError {}
 
 type ResolveResult = Result<(), ResolveError>;
 
