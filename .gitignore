@@ -12,3 +12,4 @@ memory_dump.bin
 
 __pycache__/
 *_debug/
+.DS_Store

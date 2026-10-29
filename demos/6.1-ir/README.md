@@ -16,9 +16,7 @@ cargo run -q --bin rwetac -- --wtac --dump demos/6.1-ir/01_ideas.eta   # and wri
 
 `--wtac` stops after lowering to WTAC, rwetac's IR, and prints it. `--dump`
 also writes it to `demos/6.1-ir/01_ideas_debug/01_ideas.debug.wtac`, to open
-next to the source. (Without `--wtac`, `--opt --dump` also writes the IR after
-optimization and the control-flow graphs there; that is for the optimization
-lectures.)
+next to the source.
 
 ## The output, one question at a time
 
