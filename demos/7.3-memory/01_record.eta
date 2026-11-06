@@ -1,12 +1,13 @@
 // A record lives in the stack frame. Accessing a field is a load or a
 // store at a fixed offset.
 record Point {
-    x : int
-    y : int
+    x : bool
+    a : int
+    y : bool
 }
 
 f() : int {
-    p : Point = Point(1, 2)
-    p.x = p.y + 3
-    return p.x
+    p : Point = Point(true, 2, true)
+    p.x = p.y
+    return p.a
 }
