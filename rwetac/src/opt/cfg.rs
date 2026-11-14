@@ -408,8 +408,11 @@ impl Cfg {
         let mut visited = HashSet::new();
 
         while let Some(current_id) = worklist.pop_front() {
-            if current_id == end_id || !visited.insert(current_id) {
-                continue; // Stop traversal if we hit the merge point or a visited node.
+            // Never include the merge point or the function exit block (`merge_func_exit`):
+            // a collapsed inner region that returns in all branches has an edge to `exit_id`
+            // without ending in a raw `Br`/`Return` instruction.
+            if current_id == end_id || current_id == self.exit_id || !visited.insert(current_id) {
+                continue; // Stop traversal if we hit the merge point, function exit, or a visited node.
             }
 
             region_nodes.insert(current_id);
