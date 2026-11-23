@@ -1,0 +1,34 @@
+// EXPECT: 60
+// Regression test: an `if` (with no `else`) whose `then` branch contains a
+// nested `if`/`else` that returns in both branches, followed by reachable code.
+
+in_fn(x : int) : int {
+    if (x > 0) {
+        if (x == 1) {
+            return 10
+        } else {
+            return 20
+        }
+    }
+    y : int = 30
+    return y
+}
+
+in_loop(n : int) : int {
+    i : int = 0
+    while (i < n) {
+        if (i == 1) {
+            if (n > 2) {
+                return 30
+            } else {
+                return 99
+            }
+        }
+        i = i + 1
+    }
+    return 0
+}
+
+main() : int {
+    return in_fn(1) + in_fn(0) + in_loop(5) - 10
+}
